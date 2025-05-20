@@ -1,0 +1,14 @@
+*
+!.gitignore
+
+!*.nix
+!.shellhook
+
+!src/
+!*.py
+
+!src/templates/
+!*.html
+
+!src/static/
+!*.js
