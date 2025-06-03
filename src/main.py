@@ -110,7 +110,7 @@ def choice(previous=None):
     if previous is not None:
         weights[MEMORY["index"][previous]] = 0
 
-    weights **= 2
+    weights **= 3
     weights /= weights.sum()
 
     snapshot = pd.DataFrame(
