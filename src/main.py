@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from collections import deque
+
 import os.path
 import pickle
 
@@ -18,8 +20,6 @@ def init():
 
     table = []
     index = {}
-
-    key = "kana"
 
     for i, hiragana in enumerate(
         # fmt: off
@@ -71,15 +71,17 @@ def init():
     ):
         result = kakasi.convert(hiragana)
         assert len(result) == 1, result
-        table.append({"question": result[0][key], "answer": result[0]["hepburn"]})
-        index[result[0][key]] = i
+
+        for key in ["hira", "kana"]:
+            question = result[0][key]
+            index[question] = len(table)
+            table.append({"question": question, "answer": result[0]["hepburn"]})
 
     return {
         "table": table,
         "index": index,
-        "correct": np.zeros(len(table)),
-        "incorrect": np.zeros(len(table)),
-        "streak": 0,
+        "results": [deque(maxlen=10) for _ in range(len(table))],
+        "streak": np.zeros(len(table)),
         "mask": 10,
     }
 
@@ -96,9 +98,13 @@ else:
 
 
 def choice(previous=None):
-    incorrect = MEMORY["incorrect"] + 1
+    correct = np.empty(len(MEMORY["table"]))
+    incorrect = np.empty(len(MEMORY["table"]))
+    for i in range(len(MEMORY["table"])):
+        correct[i] = sum(MEMORY["results"][i])
+        incorrect[i] = len(MEMORY["results"][i]) - correct[i]
 
-    weights = incorrect / (MEMORY["correct"] + incorrect)
+    weights = (incorrect + 1) / (correct + incorrect + 1)
     weights[MEMORY["mask"] :] = 0
 
     if previous is not None:
@@ -110,8 +116,9 @@ def choice(previous=None):
     snapshot = pd.DataFrame(
         {
             "question": [item["question"] for item in MEMORY["table"]],
-            "correct": MEMORY["correct"],
-            "incorrect": MEMORY["incorrect"],
+            "correct": correct,
+            "incorrect": incorrect,
+            "streak": MEMORY["streak"],
         },
     )
     snapshot["total"] = snapshot.correct + snapshot.incorrect
@@ -131,15 +138,14 @@ def next():
         return choice()
 
     if body["response"] is None:
-        MEMORY["correct"][MEMORY["index"][body["previous"]]] += 1
-        MEMORY["streak"] += 1
+        MEMORY["results"][MEMORY["index"][body["previous"]]].append(True)
+        MEMORY["streak"][MEMORY["index"][body["previous"]]] += 1
     else:
-        MEMORY["incorrect"][MEMORY["index"][body["previous"]]] += 1
-        MEMORY["streak"] = 0
+        MEMORY["results"][MEMORY["index"][body["previous"]]].append(False)
+        MEMORY["streak"][MEMORY["index"][body["previous"]]] = 0
 
-    if 15 < MEMORY["streak"]:
+    if np.all(3 <= MEMORY["streak"][: MEMORY["mask"]]):
         MEMORY["mask"] += 3
-        MEMORY["streak"] = 0
 
     with open(PATH, "wb") as file:
         pickle.dump(MEMORY, file)
