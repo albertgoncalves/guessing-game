@@ -147,6 +147,9 @@ def next():
     if np.all(3 <= MEMORY["streak"][: MEMORY["mask"]]):
         MEMORY["mask"] += 3
 
+    items = np.array([item["question"] for item in MEMORY["table"][: MEMORY["mask"]]])
+    print(items[MEMORY["streak"][: MEMORY["mask"]] < 3])
+
     with open(PATH, "wb") as file:
         pickle.dump(MEMORY, file)
 
