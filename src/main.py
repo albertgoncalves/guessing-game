@@ -1,124 +1,41 @@
 #!/usr/bin/env python3
 
-from collections import deque
-
+import logging
 import os.path
 import pickle
+import sys
 
 import flask
 import numpy as np
 import pandas as pd
-import pykakasi
 
 APP = flask.Flask(__name__)
 
 RNG = np.random.default_rng()
 
 
-def init():
-    kakasi = pykakasi.kakasi()
-
-    table = []
-    index = {}
-
-    for i, hiragana in enumerate(
-        # fmt: off
-        [
-            "あ", "い", "う", "え", "お",
-
-            "か", "き", "く", "け", "こ",
-            "きゃ", "きゅ", "きょ",
-
-            "さ", "し", "す", "せ", "そ",
-            "しゃ", "しゅ", "しょ",
-
-            "た", "ち", "つ", "て", "と",
-            "ちゃ", "ちゅ", "ちょ",
-
-            "な", "に", "ぬ", "ね", "の",
-            "にゃ", "にゅ", "にょ",
-
-            "は", "ひ", "ふ", "へ", "ほ",
-            "ひゃ", "ひゅ", "ひょ",
-
-            "ま", "み", "む", "め", "も",
-            "みゃ", "みゅ", "みょ",
-
-            "や", "ゆ", "よ",
-
-            "ら", "り", "る", "れ", "ろ",
-            "りゃ", "りゅ", "りょ",
-
-            "わ", "を",
-
-            "が", "ぎ", "ぐ", "げ", "ご",
-            "ぎゃ", "ぎゅ", "ぎょ",
-
-            "ざ", "じ", "ず", "ぜ", "ぞ",
-            "じゃ", "じゅ", "じょ",
-
-            "だ", "ぢ", "づ", "で", "ど",
-            "ぢゃ", "ぢゅ", "ぢょ",
-
-            "ば", "び", "ぶ", "べ", "ぼ",
-            "びゃ", "びゅ", "びょ",
-
-            "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
-            "ぴゃ", "ぴゅ", "ぴょ",
-
-            "ん",
-        ],  # fmt: on:
-    ):
-        result = kakasi.convert(hiragana)
-        assert len(result) == 1, result
-
-        for key in ["hira", "kana"]:
-            question = result[0][key]
-            index[question] = len(table)
-            table.append({"question": question, "answer": result[0]["hepburn"]})
-
-    return {
-        "table": table,
-        "index": index,
-        "results": [deque(maxlen=10) for _ in range(len(table))],
-        "streak": np.zeros(len(table)),
-        "mask": 10,
-    }
-
-
-PATH = os.path.join("data", "memory.pkl")
-
-if os.path.exists(PATH):
-    with open(PATH, "rb") as file:
-        MEMORY = pickle.load(file)
-else:
-    MEMORY = init()
-    with open(PATH, "wb") as file:
-        pickle.dump(MEMORY, file)
-
-
-def choice(previous=None):
-    correct = np.empty(len(MEMORY["table"]))
-    incorrect = np.empty(len(MEMORY["table"]))
-    for i in range(len(MEMORY["table"])):
-        correct[i] = sum(MEMORY["results"][i])
-        incorrect[i] = len(MEMORY["results"][i]) - correct[i]
+def choice(memory, previous=None):
+    correct = np.empty(len(memory["table"]))
+    incorrect = np.empty(len(memory["table"]))
+    for i in range(len(memory["table"])):
+        correct[i] = sum(memory["results"][i])
+        incorrect[i] = len(memory["results"][i]) - correct[i]
 
     weights = (incorrect + 1) / (correct + incorrect + 1)
-    weights[MEMORY["mask"] :] = 0
+    weights[memory["mask"] :] = 0
 
     if previous is not None:
-        weights[MEMORY["index"][previous]] = 0
+        weights[memory["index"][previous]] = 0
 
-    weights **= 3
+    weights **= 4
     weights /= weights.sum()
 
     snapshot = pd.DataFrame(
         {
-            "question": [item["question"] for item in MEMORY["table"]],
+            "question": [item["question"] for item in memory["table"]],
             "correct": correct,
             "incorrect": incorrect,
-            "streak": MEMORY["streak"],
+            "streak": memory["streak"],
         },
     )
     snapshot["total"] = snapshot.correct + snapshot.incorrect
@@ -127,33 +44,35 @@ def choice(previous=None):
 
     snapshot.to_csv(os.path.join("out", "snapshot.csv"))
 
-    return RNG.choice(MEMORY["table"], size=1, p=weights, shuffle=False)[0]
+    return RNG.choice(memory["table"], size=1, p=weights, shuffle=False)[0]
 
 
 @APP.route("/next", methods=["POST"])
 def next():
     body = flask.request.get_json()
 
+    path = os.path.join("data", f"{sys.argv[1]}.pkl")
+
+    with open(path, "rb") as file:
+        memory = pickle.load(file)
+
     if body is None:
-        return choice()
+        return choice(memory)
 
     if body["response"] is None:
-        MEMORY["results"][MEMORY["index"][body["previous"]]].append(True)
-        MEMORY["streak"][MEMORY["index"][body["previous"]]] += 1
+        memory["results"][memory["index"][body["previous"]]].append(True)
+        memory["streak"][memory["index"][body["previous"]]] += 1
     else:
-        MEMORY["results"][MEMORY["index"][body["previous"]]].append(False)
-        MEMORY["streak"][MEMORY["index"][body["previous"]]] = 0
+        memory["results"][memory["index"][body["previous"]]].append(False)
+        memory["streak"][memory["index"][body["previous"]]] = 0
 
-    if np.all(3 <= MEMORY["streak"][: MEMORY["mask"]]):
-        MEMORY["mask"] += 3
+    if np.all(3 <= memory["streak"][: memory["mask"]]):
+        memory["mask"] += 10
 
-    items = np.array([item["question"] for item in MEMORY["table"][: MEMORY["mask"]]])
-    print(items[MEMORY["streak"][: MEMORY["mask"]] < 3])
+    with open(path, "wb") as file:
+        pickle.dump(memory, file)
 
-    with open(PATH, "wb") as file:
-        pickle.dump(MEMORY, file)
-
-    return choice(body["previous"])
+    return choice(memory, body["previous"])
 
 
 @APP.route("/")
@@ -162,7 +81,8 @@ def home():
 
 
 def main():
-    APP.run(host="0.0.0.0", port="8000", debug=True)
+    logging.getLogger("werkzeug").setLevel(logging.ERROR)
+    APP.run(host="0.0.0.0", port="8000", debug=False)
 
 
 if __name__ == "__main__":

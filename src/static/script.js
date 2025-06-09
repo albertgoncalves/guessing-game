@@ -22,12 +22,14 @@ window.onload = function() {
         question.textContent = selected.question;
 
         answer.onkeyup = function(event) {
-            if (answer.value !== selected.answer) {
-                if (!selected.answer.startsWith(answer.value)) {
-                    feedback.textContent = selected.answer;
-                    if (response === null) {
-                        response = answer.value;
-                    }
+            if (event.keyCode !== 13) {
+                return;
+            }
+
+            if (answer.value.trim() !== selected.answer) {
+                feedback.textContent = selected.answer;
+                if (response === null) {
+                    response = answer.value.trim();
                 }
                 return;
             }
