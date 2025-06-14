@@ -2,7 +2,6 @@
 
 import logging
 import os.path
-import pickle
 import sys
 
 import flask
@@ -15,62 +14,68 @@ RNG = np.random.default_rng()
 
 
 def choice(memory, previous=None):
-    correct = np.empty(len(memory["table"]))
-    incorrect = np.empty(len(memory["table"]))
-    for i in range(len(memory["table"])):
-        correct[i] = sum(memory["results"][i])
-        incorrect[i] = len(memory["results"][i]) - correct[i]
-
-    weights = (incorrect + 1) / (correct + incorrect + 1)
-    weights[memory["mask"] :] = 0
+    memory["weight"] = 0.0
 
     if previous is not None:
-        weights[memory["index"][previous]] = 0
+        memory.loc[memory.question == previous, "mask"] = False
 
-    weights **= 4
-    weights /= weights.sum()
+    cohorts = np.sort(memory.streak.unique())
 
-    snapshot = pd.DataFrame(
-        {
-            "question": [item["question"] for item in memory["table"]],
-            "correct": correct,
-            "incorrect": incorrect,
-            "streak": memory["streak"],
-        },
+    w = 1
+    for n in np.flip(cohorts):
+        rows = (memory.streak == n) & memory["mask"]
+        k = rows.sum()
+        if k == 0:
+            continue
+        memory.loc[rows, "weight"] = w / k
+        w *= 1.5
+
+    memory.weight /= memory.weight.sum()
+    memory.to_csv(os.path.join("out", "snapshot.csv"), index=False)
+
+    if previous is not None:
+        memory.loc[memory.question == previous, "mask"] = True
+
+    print(
+        memory.loc[
+            memory.streak.isin(cohorts[:3]) & memory["mask"],
+            [
+                "question",
+                "streak",
+                "weight",
+            ],
+        ].sort_values("streak"),
     )
-    snapshot["total"] = snapshot.correct + snapshot.incorrect
-    snapshot["rate"] = snapshot.correct / snapshot.total
-    snapshot["weight"] = weights
 
-    snapshot.to_csv(os.path.join("out", "snapshot.csv"))
-
-    return RNG.choice(memory["table"], size=1, p=weights, shuffle=False)[0]
+    selected = memory.iloc[RNG.choice(len(memory), size=1, p=memory.weight, shuffle=False)[0]]
+    return {
+        "question": selected.question,
+        "answer": selected.answer,
+    }
 
 
 @APP.route("/next", methods=["POST"])
 def next():
     body = flask.request.get_json()
 
-    path = os.path.join("data", f"{sys.argv[1]}.pkl")
-
-    with open(path, "rb") as file:
-        memory = pickle.load(file)
+    path = os.path.join("data", f"{sys.argv[1]}.csv")
+    memory = pd.read_csv(path)
 
     if body is None:
         return choice(memory)
 
+    rows = memory.question == body["previous"]
+    assert rows.sum() == 1, body["previous"]
+
     if body["response"] is None:
-        memory["results"][memory["index"][body["previous"]]].append(True)
-        memory["streak"][memory["index"][body["previous"]]] += 1
+        memory.loc[rows, "streak"] += 1
     else:
-        memory["results"][memory["index"][body["previous"]]].append(False)
-        memory["streak"][memory["index"][body["previous"]]] = 0
+        memory.loc[rows, "streak"] = 0
 
-    if np.all(3 <= memory["streak"][: memory["mask"]]):
-        memory["mask"] += 10
+    if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "streak"]).all():
+        memory["mask"].values[: memory["mask"].sum() + 10] = True
 
-    with open(path, "wb") as file:
-        pickle.dump(memory, file)
+    memory.to_csv(path, index=False)
 
     return choice(memory, body["previous"])
 

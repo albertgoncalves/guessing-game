@@ -1,90 +1,78 @@
 #!/usr/bin/env python3
 
-from collections import deque
-
 import os.path
-import pickle
 import sys
 
 import numpy as np
+import pandas as pd
 import pykakasi
 
 
 def init_jp():
     kakasi = pykakasi.kakasi()
 
-    table = []
-    index = {}
+    memory = []
 
-    for i, hiragana in enumerate(
-        # fmt: off
-        [
-            "あ", "い", "う", "え", "お",
+    # fmt: off
+    for hiragana in [
+        "あ", "い", "う", "え", "お",
 
-            "か", "き", "く", "け", "こ",
-            "きゃ", "きゅ", "きょ",
+        "か", "き", "く", "け", "こ",
+        "きゃ", "きゅ", "きょ",
 
-            "さ", "し", "す", "せ", "そ",
-            "しゃ", "しゅ", "しょ",
+        "さ", "し", "す", "せ", "そ",
+        "しゃ", "しゅ", "しょ",
 
-            "た", "ち", "つ", "て", "と",
-            "ちゃ", "ちゅ", "ちょ",
+        "た", "ち", "つ", "て", "と",
+        "ちゃ", "ちゅ", "ちょ",
 
-            "な", "に", "ぬ", "ね", "の",
-            "にゃ", "にゅ", "にょ",
+        "な", "に", "ぬ", "ね", "の",
+        "にゃ", "にゅ", "にょ",
 
-            "は", "ひ", "ふ", "へ", "ほ",
-            "ひゃ", "ひゅ", "ひょ",
+        "は", "ひ", "ふ", "へ", "ほ",
+        "ひゃ", "ひゅ", "ひょ",
 
-            "ま", "み", "む", "め", "も",
-            "みゃ", "みゅ", "みょ",
+        "ま", "み", "む", "め", "も",
+        "みゃ", "みゅ", "みょ",
 
-            "や", "ゆ", "よ",
+        "や", "ゆ", "よ",
 
-            "ら", "り", "る", "れ", "ろ",
-            "りゃ", "りゅ", "りょ",
+        "ら", "り", "る", "れ", "ろ",
+        "りゃ", "りゅ", "りょ",
 
-            "わ", "を",
+        "わ", "を",
 
-            "が", "ぎ", "ぐ", "げ", "ご",
-            "ぎゃ", "ぎゅ", "ぎょ",
+        "が", "ぎ", "ぐ", "げ", "ご",
+        "ぎゃ", "ぎゅ", "ぎょ",
 
-            "ざ", "じ", "ず", "ぜ", "ぞ",
-            "じゃ", "じゅ", "じょ",
+        "ざ", "じ", "ず", "ぜ", "ぞ",
+        "じゃ", "じゅ", "じょ",
 
-            "だ", "ぢ", "づ", "で", "ど",
-            "ぢゃ", "ぢゅ", "ぢょ",
+        "だ", "ぢ", "づ", "で", "ど",
+        "ぢゃ", "ぢゅ", "ぢょ",
 
-            "ば", "び", "ぶ", "べ", "ぼ",
-            "びゃ", "びゅ", "びょ",
+        "ば", "び", "ぶ", "べ", "ぼ",
+        "びゃ", "びゅ", "びょ",
 
-            "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
-            "ぴゃ", "ぴゅ", "ぴょ",
+        "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
+        "ぴゃ", "ぴゅ", "ぴょ",
 
-            "ん",
-        ],  # fmt: on:
-    ):
+        "ん",
+    ]:  # fmt: on:
         result = kakasi.convert(hiragana)
         assert len(result) == 1, result
 
         for key in ["hira", "kana"]:
-            question = result[0][key]
-            assert question not in index.keys(), question
-            index[question] = len(table)
-            table.append({"question": question, "answer": result[0]["hepburn"]})
+            memory.append({"question": result[0][key], "answer": result[0]["hepburn"]})
 
-    return {
-        "table": table,
-        "index": index,
-        "results": [deque(maxlen=10) for _ in range(len(table))],
-        "streak": np.zeros(len(table)),
-        "mask": 10,
-    }
+    memory = pd.DataFrame(memory)
+    assert memory.question.duplicated().sum() == 0
+
+    return memory
 
 
 def init_pt():
-    table = []
-    index = {}
+    memory = []
 
     for question, answer in [
         ("falo", "I speak"),
@@ -159,35 +147,35 @@ def init_pt():
         ("partíamos", "we were departing"),
         ("eles partiam", "they were departing"),
         ("vocês partiam", "you were departing (polite pl.)"),
-        ("falarei", "I shall speak"),
+        ("falarei", "I will speak"),
         ("falarás", "you will speak (fam. sing.)"),
         ("ele falará", "he will speak"),
         ("você falará", "you will speak (polite sing.)"),
-        ("falaremos", "we shall speak"),
+        ("falaremos", "we will speak"),
         ("eles falarão", "they will speak"),
         ("vocês falarão", "you will speak (polite pl.)"),
-        ("venderi", "I shall sell"),
+        ("venderei", "I will sell"),
         ("venderás", "you will sell (fam. sing.)"),
         ("ele venderá", "he will sell"),
         ("você venderá", "you will sell (polite sing.)"),
-        ("venderemos", "we shall sell"),
+        ("venderemos", "we will sell"),
         ("eles venderão", "they will sell"),
         ("vocês venderão", "you will sell (polite pl.)"),
-        ("partirei", "I shall depart"),
+        ("partirei", "I will depart"),
         ("partirás", "you will depart (fam. sing.)"),
         ("ele partirá", "he will depart"),
         ("você partirá", "you will depart (polite sing.)"),
-        ("partiremos", "we shall depart"),
+        ("partiremos", "we will depart"),
         ("eles partirão", "they will depart"),
         ("vocês partirão", "you will depart (polite pl.)"),
-        ("procurá-lo-ei", "I shall look for it"),
+        ("procurá-lo-ei", "I will look for it"),
         ("procurá-lo-ás", "you will look for it (fam. sing.)"),
         ("ele procurá-lo-á", "he will look for it"),
         ("você procurá-lo-á", "you will look for it (polite sing.)"),
         ("procurá-lo-emos", "we will look for it"),
         ("eles procurá-lo-ão", "they will look for it"),
         ("vocês procurá-lo-ão", "you will look for it (polite pl.)"),
-        ("falar-lhe-ei", "I shall speak to him"),
+        ("falar-lhe-ei", "I will speak to him"),
         ("falar-lhe-ás", "you will speak to him (fam. sing.)"),
         ("ele falar-lhe-á", "he will speak to him"),
         ("você falar-lhe-á", "you will speak to him (polite sing.)"),
@@ -211,55 +199,92 @@ def init_pt():
         ("deitei-me", "I lay down"),
         ("deitava-me", "I was lying down"),
         ("tinha-me deitado", "I had lain down"),
-        ("deitar-me-ei", "I shall lie down"),
+        ("deitar-me-ei", "I will lie down"),
         ("deitar-me-ia", "I would lie down"),
-        ("deite-se", "lie down!"),
+        ("deite-se", "lie down! (polite sing.)"),
         ("fui", "I went, I was (ser, pretérito perfeito)"),
         ("eu ia", "I was going"),
         ("estive", "I was (estar, pretérito perfeito)"),
         ("eu estava", "I was (estar, pretérito imperfeito)"),
         ("tive", "I had"),
+        ("eles dão", "they give"),
+        ("eles davam", "they were giving"),
+        ("eles deram", "they gave"),
+        ("faço", "I do"),
+        ("eu fazia", "I was doing"),
+        ("fiz", "I did"),
+        ("ele fez", "he did"),
+        ("eu seria", "I would be (ser)"),
+        ("eu estaria", "I would be (estar)"),
+        ("eu escrevera", "I had written"),
+        ("ver", "to see"),
+        ("vir", "to come"),
+        ("venho", "I come"),
+        ("eu vinha", "I was coming"),
+        ("vim", "I came"),
+        ("ele veio", "he came"),
+        ("vínhamos", "we were coming"),
+        ("vimos (presente)", "we come"),
+        ("viemos", "we came"),
+        ("ele vê", "he sees"),
+        ("ele via", "he was seeing"),
+        ("ele viu", "he saw"),
+        ("vimos (pretérito perfeito)", "we saw"),
+        ("vemos", "we see"),
+        ("vejo", "I see"),
+        ("vi", "I saw"),
+        ("eu via", "I was seeing"),
+        ("eles veem", "they see"),
+        ("eles viram", "they saw"),
+        ("eles viam", "they were seeing"),
+        ("eles vieram", "they came"),
+        ("eles vinham", "they were coming"),
+        ("eles vêm", "they come"),
+        ("dou", "I give"),
+        ("dás", "you give (fam. sing.)"),
+        ("ele dá", "he gives"),
+        ("damos", "we give"),
+        ("eu dava", "I was giving"),
+        ("davas", "you were giving (fam. sing.)"),
+        ("ele dava", "he was giving"),
+        ("dávamos", "we were giving"),
+        ("dei", "I gave"),
+        ("deste", "you gave (fam. sing.)"),
+        ("ele deu", "he gave"),
+        ("demos", "we gave, let's give"),
+        ("dê", "give! (polite sing.)"),
+        ("deem", "give! (polite pl.)"),
+        ("ele faz", "he does"),
+        ("fazemos", "we do"),
+        ("eles fazem", "they do"),
+        ("fazes", "you do (fam. sing.)"),
+        ("fizeste", "you did (fam. sing.)"),
+        ("fizemos", "we did"),
+        ("eles fizeram", "they did, they had done"),
+        ("eu faria", "I would do"),
+        ("farei", "I will do"),
+        ("farás", "you will do (fam. sing.)"),
+        ("ele fará", "he will do"),
+        ("faremos", "we will do"),
+        ("eles farão", "they will do"),
+        ("fiquei", "I stayed"),
+        ("fico", "I stay"),
+        ("ele ficou", "he stayed"),
+        ("ele fica", "he stays"),
+        ("você fica", "you stay (polite sing.)"),
     ]:
-        for key in [question, answer]:
-            assert key not in index.keys(), key
+        memory.append({"question": question, "answer": answer})
+        memory.append({"question": answer, "answer": question})
 
-        index[question] = len(table)
-        table.append({"question": question, "answer": answer})
+    memory = pd.DataFrame(memory)
+    assert memory.question.duplicated().sum() == 0
+    assert memory.answer.duplicated().sum() == 0
 
-        index[answer] = len(table)
-        table.append({"question": answer, "answer": question})
-
-    return {
-        "table": table,
-        "index": index,
-        "results": [deque(maxlen=10) for _ in range(len(table))],
-        "streak": np.zeros(len(table)),
-        "mask": 10,
-    }
-
-
-def update(old, new):
-    for item in new["table"]:
-        if item["question"] in old["index"].keys():
-            continue
-
-        print(item)
-
-        old["index"][item["question"]] = len(old["table"])
-        old["table"].append(item)
-        old["results"].append(deque(maxlen=10))
-
-    streak = np.zeros(len(old["table"]))
-    streak[: len(old["streak"])] = old["streak"]
-    old["streak"] = streak
-
-    assert len(old["table"]) == len(old["index"])
-    assert len(old["table"]) == len(old["results"])
-    assert len(old["table"]) == len(old["streak"])
+    return memory
 
 
 def main():
-    path = os.path.join("data", f"{sys.argv[1]}.pkl")
+    path = os.path.join("data", f"{sys.argv[1]}.csv")
 
     if sys.argv[1] == "jp":
         init = init_jp
@@ -269,17 +294,35 @@ def main():
         assert False, sys.argv[1]
 
     if not os.path.exists(path):
-        with open(path, "wb") as file:
-            pickle.dump(init(), file)
+        memory = init()
+
+        memory["streak"] = 0
+
+        mask = np.zeros(len(memory), dtype=np.bool)
+        mask[:10] = True
+
+        memory["mask"] = mask
+
+        memory.to_csv(path, index=False)
     else:
-        with open(path, "rb") as file:
-            old = pickle.load(file)
-
+        old = pd.read_csv(path)
         new = init()
-        update(old, new)
 
-        with open(path, "wb") as file:
-            pickle.dump(old, file)
+        missing = new.loc[~new.question.isin(old.question)].copy()
+        if len(missing) == 0:
+            print("Nothing to do!")
+            return
+
+        missing["streak"] = 0
+        missing["mask"] = np.zeros(len(missing), dtype=np.bool)
+
+        combined = pd.concat([old, missing], ignore_index=True)
+        assert combined.question.duplicated().sum() == 0
+
+        if sys.argv[1] == "pt":
+            assert combined.answer.duplicated().sum() == 0
+
+        combined.to_csv(path, index=False)
 
 
 if __name__ == "__main__":
