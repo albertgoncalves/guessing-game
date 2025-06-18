@@ -292,11 +292,11 @@ def init_pt():
         ("ele pode", "he can"),
         ("podemos", "we can"),
         ("eles podem", "they can"),
-        ("pude", "I was able"),
-        ("pudeste", "you were able (fam. sing.)"),
-        ("ele pôde", "he was able"),
-        ("pudemos", "we were able"),
-        ("eles puderam", "they were able, they had been able"),
+        ("pude", "I was able (pretérito perfeito)"),
+        ("pudeste", "you were able (fam. sing., pretérito perfeito)"),
+        ("ele pôde", "he was able (pretérito perfeito)"),
+        ("pudemos", "we were able (pretérito perfeito)"),
+        ("eles puderam", "they were able (pretérito perfeito), they had been able"),
     ]:
         memory.append({"question": question, "answer": answer})
         memory.append({"question": answer, "answer": question})
