@@ -198,7 +198,7 @@ def init_pt():
         ("vocês deitam-se", "you lie down (polite pl.)"),
         ("deitei-me", "I lay down"),
         ("deitava-me", "I was lying down"),
-        ("tinha-me deitado", "I had lain down"),
+        ("tinha-me deitado", "I had lain down (spoken)"),
         ("deitar-me-ei", "I will lie down"),
         ("deitar-me-ia", "I would lie down"),
         ("deite-se", "lie down! (polite sing.)"),
@@ -216,7 +216,7 @@ def init_pt():
         ("ele fez", "he did"),
         ("eu seria", "I would be (ser)"),
         ("eu estaria", "I would be (estar)"),
-        ("eu escrevera", "I had written"),
+        ("eu escrevera", "I had written (literary)"),
         ("ver", "to see"),
         ("vir", "to come"),
         ("venho", "I come"),
@@ -260,7 +260,7 @@ def init_pt():
         ("fazes", "you do (fam. sing.)"),
         ("fizeste", "you did (fam. sing.)"),
         ("fizemos", "we did"),
-        ("eles fizeram", "they did, they had done"),
+        ("eles fizeram", "they did, they had done (literary)"),
         ("eu faria", "I would do"),
         ("farei", "I will do"),
         ("farás", "you will do (fam. sing.)"),
@@ -296,7 +296,7 @@ def init_pt():
         ("pudeste", "you were able (fam. sing., pretérito perfeito)"),
         ("ele pôde", "he was able (pretérito perfeito)"),
         ("pudemos", "we were able (pretérito perfeito)"),
-        ("eles puderam", "they were able (pretérito perfeito), they had been able"),
+        ("eles puderam", "they were able (pretérito perfeito), they had been able (literary)"),
     ]:
         memory.append({"question": question, "answer": answer})
         memory.append({"question": answer, "answer": question})

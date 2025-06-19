@@ -28,7 +28,7 @@ def choice(memory, previous=None):
         if k == 0:
             continue
         memory.loc[rows, "weight"] = w / k
-        w *= 1.5
+        w *= 1.25
 
     memory.weight /= memory.weight.sum()
     memory.to_csv(os.path.join("out", "snapshot.csv"), index=False)
