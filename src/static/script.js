@@ -21,25 +21,39 @@ function getElement(id) {
 function draw(canvas, context, consec, weights) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    const width = canvas.width / (weights[0].consec + 1);
+    const width = canvas.width / weights.length;
 
     context.beginPath();
-    for (let weight of weights) {
-        context.rect(weight.consec * width, canvas.height, width, (-weight.weight) * canvas.height);
+    for (let i = 0; i < weights.length; ++i) {
+        context.rect(i * width,
+                     canvas.height,
+                     width,
+                     (-weights[(weights.length - 1) - i].weight) * canvas.height);
     }
     context.fill();
 
-    const x = (consec * width) + (width / 2);
-
-    context.beginPath();
-    context.moveTo(x, 0);
-    context.lineTo(x, canvas.height);
-    context.stroke();
+    for (let i = 0; i < weights.length; ++i) {
+        if (consec === weights[(weights.length - 1) - i].consec) {
+            const x = (i * width) + (width / 2);
+            context.beginPath();
+            context.moveTo(x, 0);
+            context.lineTo(x, canvas.height);
+            context.stroke();
+            break;
+        }
+    }
 }
 
 window.onload = function() {
     post(function(next) {
-        console.log(next);
+        const question = getElement("question");
+        const answer = getElement("answer");
+        const feedback = getElement("feedback");
+
+        let selected = next;
+        let response = null;
+
+        question.textContent = selected.question;
 
         const canvas = getElement("canvas");
         const context = canvas.getContext("2d");
@@ -49,14 +63,6 @@ window.onload = function() {
         context.strokeStyle = "hsl(5, 35%, 50%)";
         context.lineWidth = 5;
 
-        const question = getElement("question");
-        const answer = getElement("answer");
-        const feedback = getElement("feedback");
-
-        let selected = next;
-        let response = null;
-
-        question.textContent = selected.question;
         draw(canvas, context, selected.consec, selected.weights);
 
         answer.onkeyup = function(event) {
