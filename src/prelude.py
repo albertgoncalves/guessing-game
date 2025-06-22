@@ -321,7 +321,7 @@ def main():
     if not os.path.exists(path):
         memory = init()
 
-        memory["streak"] = 0
+        memory["consec"] = 0
 
         mask = np.zeros(len(memory), dtype=np.bool)
         mask[:10] = True
@@ -338,7 +338,7 @@ def main():
             print("Nothing to do!")
             return
 
-        missing["streak"] = 0
+        missing["consec"] = 0
         missing["mask"] = np.zeros(len(missing), dtype=np.bool)
 
         combined = pd.concat([old, missing], ignore_index=True)

@@ -19,16 +19,25 @@ def choice(memory, previous=None):
     if previous is not None:
         memory.loc[memory.question == previous, "mask"] = False
 
-    cohorts = np.sort(memory.streak.unique())
+    consecs = np.sort(memory.loc[memory["mask"], "consec"].unique())
 
-    w = 1
-    for n in np.flip(cohorts):
-        rows = (memory.streak == n) & memory["mask"]
+    weights = []
+    weight = 1
+    for consec in np.flip(consecs):
+        rows = (memory.consec == consec) & memory["mask"]
         k = rows.sum()
-        if k == 0:
-            continue
-        memory.loc[rows, "weight"] = w / k
-        w *= 1.25
+        assert k != 0, consec
+        memory.loc[rows, "weight"] = weight / k
+        weights.append(
+            {
+                "consec": consec,
+                "weight": weight,
+            },
+        )
+        weight *= 1.5
+
+    weights = pd.DataFrame(weights)
+    weights.weight /= weights.weight.sum()
 
     memory.weight /= memory.weight.sum()
     memory.to_csv(os.path.join("out", "snapshot.csv"), index=False)
@@ -38,19 +47,21 @@ def choice(memory, previous=None):
 
     print(
         memory.loc[
-            memory.streak.isin(cohorts[:3]) & memory["mask"],
+            memory.consec.isin(consecs[:3]) & memory["mask"],
             [
                 "question",
-                "streak",
+                "consec",
                 "weight",
             ],
-        ].sort_values("streak"),
+        ].sort_values("consec"),
     )
 
     selected = memory.iloc[RNG.choice(len(memory), size=1, p=memory.weight, shuffle=False)[0]]
     return {
         "question": selected.question,
         "answer": selected.answer,
+        "consec": int(selected.consec),
+        "weights": weights.to_dict(orient="records"),
     }
 
 
@@ -68,11 +79,11 @@ def next():
     assert rows.sum() == 1, body["previous"]
 
     if body["response"] is None:
-        memory.loc[rows, "streak"] += 1
+        memory.loc[rows, "consec"] += 1
     else:
-        memory.loc[rows, "streak"] = 0
+        memory.loc[rows, "consec"] = 0
 
-    if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "streak"]).all():
+    if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "consec"]).all():
         memory["mask"].values[: memory["mask"].sum() + 10] = True
 
     memory.to_csv(path, index=False)
