@@ -297,6 +297,20 @@ def init_pt():
         ("ele pôde", "he was able (pretérito perfeito)"),
         ("pudemos", "we were able (pretérito perfeito)"),
         ("eles puderam", "they were able (pretérito perfeito), they had been able (literary)"),
+        ("vou", "I go"),
+        ("vais", "you go (fam. sing.)"),
+        ("ele vai", "he goes"),
+        ("vamos", "we go"),
+        ("eles vão", "they go"),
+        ("ele ia", "he was going"),
+        ("ias", "you were going (fam. sing.)"),
+        ("íamos", "we were going"),
+        ("eles iam", "they were going"),
+        ("foste", "you went, you were (fam. sing., ser, pretérito perfeito)"),
+        ("ele foi", "he went, he was (ser, pretérito perfeito)"),
+        ("fomos", "we went, we were (ser, pretérito perfeito)"),
+        ("eles foram", "they went, they were (ser, pretérito perfeito)"),
+        ("ele esteve", "he was (estar, pretérito perfeito)"),
     ]:
         memory.append({"question": question, "answer": answer})
         memory.append({"question": answer, "answer": question})
