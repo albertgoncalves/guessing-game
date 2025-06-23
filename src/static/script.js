@@ -18,27 +18,41 @@ function getElement(id) {
     return element;
 }
 
-function draw(canvas, context, consec, weights) {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+function draw(canvasWeights, contextWeights, canvasSizes, contextSizes, consec, weights) {
+    contextWeights.clearRect(0, 0, canvasWeights.width, canvasWeights.height);
+    contextSizes.clearRect(0, 0, canvasSizes.width, canvasSizes.height);
 
-    const width = canvas.width / weights.length;
+    const width = canvasWeights.width / weights.length;
 
-    context.beginPath();
+    contextWeights.beginPath();
+    contextSizes.beginPath();
     for (let i = 0; i < weights.length; ++i) {
-        context.rect(i * width,
-                     canvas.height,
-                     width,
-                     (-weights[(weights.length - 1) - i].weight) * canvas.height);
+        contextWeights.rect(i * width,
+                            canvasWeights.height,
+                            width,
+                            (-weights[(weights.length - 1) - i].weight) * canvasWeights.height);
+
+        contextSizes.rect(i * width,
+                          canvasSizes.height,
+                          width,
+                          (-weights[(weights.length - 1) - i].size) * canvasSizes.height);
     }
-    context.fill();
+    contextWeights.fill();
+    contextSizes.fill();
 
     for (let i = 0; i < weights.length; ++i) {
         if (consec === weights[(weights.length - 1) - i].consec) {
             const x = (i * width) + (width / 2);
-            context.beginPath();
-            context.moveTo(x, 0);
-            context.lineTo(x, canvas.height);
-            context.stroke();
+
+            contextWeights.beginPath();
+            contextWeights.moveTo(x, 0);
+            contextWeights.lineTo(x, canvasWeights.height);
+            contextWeights.stroke();
+
+            contextSizes.beginPath();
+            contextSizes.moveTo(x, 0);
+            contextSizes.lineTo(x, canvasSizes.height);
+            contextSizes.stroke();
             break;
         }
     }
@@ -55,15 +69,28 @@ window.onload = function() {
 
         question.textContent = selected.question;
 
-        const canvas = getElement("canvas");
-        const context = canvas.getContext("2d");
-        context.imageSmoothingEnabled = false;
+        const canvasWeights = getElement("canvas-weights");
+        const contextWeights = canvasWeights.getContext("2d");
+        contextWeights.imageSmoothingEnabled = false;
 
-        context.fillStyle = "hsl(0, 0%, 90%)";
-        context.strokeStyle = "hsl(5, 35%, 50%)";
-        context.lineWidth = 5;
+        contextWeights.fillStyle = "hsl(0, 0%, 90%)";
+        contextWeights.strokeStyle = "hsl(5, 35%, 50%)";
+        contextWeights.lineWidth = 5;
 
-        draw(canvas, context, selected.consec, selected.weights);
+        const canvasSizes = getElement("canvas-sizes");
+        const contextSizes = canvasSizes.getContext("2d");
+        contextSizes.imageSmoothingEnabled = false;
+
+        contextSizes.fillStyle = "hsl(0, 0%, 90%)";
+        contextSizes.strokeStyle = "hsl(5, 35%, 50%)";
+        contextSizes.lineWidth = 5;
+
+        draw(canvasWeights,
+             contextWeights,
+             canvasSizes,
+             contextSizes,
+             selected.consec,
+             selected.weights);
 
         answer.onkeyup = function(event) {
             if (event.keyCode !== 13) {
@@ -85,7 +112,12 @@ window.onload = function() {
                 question.textContent = selected.question;
                 answer.value = "";
                 feedback.textContent = "";
-                draw(canvas, context, selected.consec, selected.weights);
+                draw(canvasWeights,
+                     contextWeights,
+                     canvasSizes,
+                     contextSizes,
+                     selected.consec,
+                     selected.weights);
             }, {previous: selected.question, response});
         };
 

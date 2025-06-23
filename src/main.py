@@ -25,19 +25,21 @@ def choice(memory, previous=None):
     weight = 1
     for consec in np.flip(consecs):
         rows = (memory.consec == consec) & memory["mask"]
-        k = rows.sum()
-        assert k != 0, consec
-        memory.loc[rows, "weight"] = weight / k
+        size = rows.sum()
+        assert size != 0, consec
+        memory.loc[rows, "weight"] = weight / size
         weights.append(
             {
                 "consec": consec,
                 "weight": weight,
+                "size": size,
             },
         )
-        weight *= 1.5
+        weight *= 1.75
 
     weights = pd.DataFrame(weights)
-    weights.weight /= weights.weight.sum()
+    for column in ["weight", "size"]:
+        weights[column] /= weights[column].sum()
 
     memory.weight /= memory.weight.sum()
     memory.to_csv(os.path.join("out", "snapshot.csv"), index=False)
