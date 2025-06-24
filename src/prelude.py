@@ -326,7 +326,7 @@ def init_pt():
         ("ele está", "he is (estar)"),
         ("estamos", "we are (estar)"),
         ("eles estão", "they are (estar)"),
-        ("estiveste", "you were (estar, pretérito perfeito)"),
+        ("estiveste", "you were (fam. sing., estar, pretérito perfeito)"),
         ("estivemos", "we were (estar, pretérito perfeito)"),
         ("eles estiveram", "they were (estar, pretérito perfeito)"),
         ("tenho", "I have"),
