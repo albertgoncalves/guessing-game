@@ -193,7 +193,7 @@ def init_pt():
         ("deitas-te", "you lie down (fam. sing.)"),
         ("ele deita-se", "he lies down"),
         ("você deita-se", "you lie down (polite sing.)"),
-        ("deitamos-nos", "we lie down"),
+        ("deitamo-nos", "we lie down"),
         ("eles deitam-se", "they lie down"),
         ("vocês deitam-se", "you lie down (polite pl.)"),
         ("deitei-me", "I lay down"),
