@@ -85,6 +85,11 @@ def next():
     else:
         memory.loc[rows, "consec"] = 0
 
+    rows = 3 <= memory.consec
+    memory.loc[rows, "consec"] = memory.loc[rows, "consec"].map(
+        {consec: i + 3 for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))},
+    )
+
     if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "consec"]).all():
         memory["mask"].values[: memory["mask"].sum() + 10] = True
 
