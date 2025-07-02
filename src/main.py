@@ -35,7 +35,7 @@ def choice(memory, previous=None):
                 "size": size,
             },
         )
-        weight *= 1.75
+        weight *= 1.95
 
     weights = pd.DataFrame(weights)
     for column in ["weight", "size"]:
