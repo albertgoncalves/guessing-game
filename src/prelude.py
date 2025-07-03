@@ -13,7 +13,7 @@ import pykakasi
 def init_jp():
     kakasi = pykakasi.kakasi()
 
-    memory = []
+    results = []
 
     # fmt: off
     for hiragana in [
@@ -65,16 +65,16 @@ def init_jp():
         assert len(result) == 1, result
 
         for key in ["hira", "kana"]:
-            memory.append({"question": result[0][key], "answer": result[0]["hepburn"]})
+            results.append({"question": result[0][key], "answer": result[0]["hepburn"]})
 
-    memory = pd.DataFrame(memory)
-    assert memory.question.duplicated().sum() == 0
+    results = pd.DataFrame(results)
+    assert results.question.duplicated().sum() == 0
 
-    return memory
+    return results
 
 
 def init_pt():
-    memory = []
+    results = []
 
     for question, answer in [
         ("falo", "I speak"),
@@ -384,7 +384,7 @@ def init_pt():
         ("levei", "I took"),
         ("levaste", "you took (fam. sing.)"),
         ("ele levou", "he took"),
-        ("eles leveram", "they took"),
+        ("eles levaram", "they took"),
         ("leve", "take! (polite sing.)"),
         ("levemos", "let's take"),
         ("levem", "take! (polite pl.)"),
@@ -406,14 +406,14 @@ def init_pt():
         ("vias", "you were seeing (fam. sing.)"),
         ("vês", "you see (fam. sing.)"),
     ]:
-        memory.append({"question": question, "answer": answer})
-        memory.append({"question": answer, "answer": question})
+        results.append({"question": question, "answer": answer})
+        results.append({"question": answer, "answer": question})
 
-    memory = pd.DataFrame(memory)
-    assert memory.question.duplicated().sum() == 0
-    assert memory.answer.duplicated().sum() == 0
+    results = pd.DataFrame(results)
+    assert results.question.duplicated().sum() == 0
+    assert results.answer.duplicated().sum() == 0
 
-    return memory
+    return results
 
 
 # NOTE: See `https://www.edrdg.org/kanjidic/kanjd2index_legacy.html`.
