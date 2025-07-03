@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+import gzip
 import os.path
 import sys
+import xml.etree.ElementTree as et
 
 import numpy as np
 import pandas as pd
@@ -414,6 +416,70 @@ def init_pt():
     return memory
 
 
+# NOTE: See `https://www.edrdg.org/kanjidic/kanjd2index_legacy.html`.
+# NOTE: See `https://github.com/davidluzgouveia/kanji-data/blob/master/tools/kanjidic.py`.
+def init_kanjidic():
+    with open(os.path.join("data", "kanjidic2.xml.gz"), "rb") as file:
+        xml = gzip.decompress(file.read()).decode("utf-8")
+
+    with open(os.path.join("out", "kanjidic2.xml"), "w") as file:
+        file.write(xml)
+
+    results = []
+    for character in et.fromstring(xml).iter("character"):
+        misc = character.find("misc")
+        if misc is None:
+            continue
+
+        reading_meaning = character.find("reading_meaning")
+        if reading_meaning is None:
+            continue
+
+        rmgroup = reading_meaning.find("rmgroup")
+        if rmgroup is None:
+            continue
+
+        meaning_en = []
+        meaning_pt = []
+        for meaning in rmgroup.iter("meaning"):
+            m_lang = meaning.attrib.get("m_lang")
+            if m_lang is None:
+                meaning_en.append(meaning.text.strip().lower())
+            elif m_lang == "pt":
+                meaning_pt.append(meaning.text.strip().lower())
+
+        if (len(meaning_en) == 0) or (len(meaning_pt) == 0):
+            continue
+
+        grade = misc.find("grade")
+        freq = misc.find("freq")
+
+        results.append(
+            {
+                "literal": character.find("literal").text,
+                "meaning_en": meaning_en,
+                "meaning_pt": meaning_pt,
+                "grade": None if grade is None else grade.text,
+                "stroke_count": int(misc.find("stroke_count").text),
+                "freq": None if freq is None else freq.text,
+            },
+        )
+
+    results = pd.DataFrame(results).astype({"grade": "Int64", "freq": "Int64"})
+    results["#_en"] = results.meaning_en.map(len)
+    results["#_pt"] = results.meaning_pt.map(len)
+    results.sort_values(
+        ["grade", "stroke_count", "freq"],
+        ascending=[True, True, False],
+        ignore_index=True,
+        inplace=True,
+    )
+
+    results["question"] = results.literal
+    results["answer"] = results.meaning_pt.map(", ".join)
+    return results.loc[results.freq.notnull(), ["question", "answer"]].copy()
+
+
 def main():
     path = os.path.join("data", f"{sys.argv[1]}.csv")
 
@@ -421,6 +487,8 @@ def main():
         init = init_jp
     elif sys.argv[1] == "pt":
         init = init_pt
+    elif sys.argv[1] == "kanjidic":
+        init = init_kanjidic
     else:
         assert False, sys.argv[1]
 
