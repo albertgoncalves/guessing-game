@@ -405,6 +405,9 @@ def init_pt():
         ("viste", "you saw (fam. sing.)"),
         ("vias", "you were seeing (fam. sing.)"),
         ("vês", "you see (fam. sing.)"),
+        ("o feriado", "holiday"),
+        ("as férias", "vacation"),
+        ("eu soubera", "I had known (literary)"),
     ]:
         results.append({"question": question, "answer": answer})
         results.append({"question": answer, "answer": question})
@@ -469,8 +472,8 @@ def init_kanjidic():
     results["#_en"] = results.meaning_en.map(len)
     results["#_pt"] = results.meaning_pt.map(len)
     results.sort_values(
-        ["grade", "stroke_count", "freq"],
-        ascending=[True, True, False],
+        ["#_pt", "grade", "stroke_count", "freq"],
+        ascending=[True, True, True, False],
         ignore_index=True,
         inplace=True,
     )
