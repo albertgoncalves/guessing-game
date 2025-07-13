@@ -408,6 +408,20 @@ def init_pt():
         ("o feriado", "holiday"),
         ("as férias", "vacation"),
         ("eu soubera", "I had known (literary)"),
+        ("saio", "I exit"),
+        ("sais", "you exit (fam. sing.)"),
+        ("ele sai", "he exits"),
+        ("saímos", "we exit, we exited"),
+        ("eles saem", "they exit"),
+        ("saí", "I exited"),
+        ("saíste", "you exited (fam. sing.)"),
+        ("ele saiu", "he exited"),
+        ("eles saíram", "they exited"),
+        ("eu saía", "I was exiting"),
+        ("saías", "you were exiting (fam. sing.)"),
+        ("ele saía", "he was exiting"),
+        ("saíamos", "we were exiting"),
+        ("eles saíam", "they were exiting"),
     ]:
         results.append({"question": question, "answer": answer})
         results.append({"question": answer, "answer": question})
