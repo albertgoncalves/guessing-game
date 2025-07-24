@@ -13,7 +13,7 @@ import pykakasi
 def init_jp():
     kakasi = pykakasi.kakasi()
 
-    results = []
+    data = []
 
     # fmt: off
     for hiragana in [
@@ -65,16 +65,16 @@ def init_jp():
         assert len(result) == 1, result
 
         for key in ["hira", "kana"]:
-            results.append({"question": result[0][key], "answer": result[0]["hepburn"]})
+            data.append({"question": result[0][key], "answer": result[0]["hepburn"]})
 
-    results = pd.DataFrame(results)
-    assert results.question.duplicated().sum() == 0
+    data = pd.DataFrame(data)
+    assert data.question.duplicated().sum() == 0
 
-    return results
+    return data
 
 
 def init_pt():
-    results = []
+    data = []
 
     for question, answer in [
         ("falo", "I speak"),
@@ -311,7 +311,10 @@ def init_pt():
         ("foste", "you went, you were (fam. sing., ser, pretérito perfeito)"),
         ("ele foi", "he went, he was (ser, pretérito perfeito)"),
         ("fomos", "we went, we were (ser, pretérito perfeito)"),
-        ("eles foram", "they went, they were (ser, pretérito perfeito)"),
+        (
+            "eles foram",
+            "they went, they were (ser, pretérito perfeito), they had been (ser, literary)",
+        ),
         ("ele esteve", "he was (estar, pretérito perfeito)"),
         ("sou", "I am (ser)"),
         ("és", "you are (fam. sing., ser)"),
@@ -422,15 +425,22 @@ def init_pt():
         ("ele saía", "he was exiting"),
         ("saíamos", "we were exiting"),
         ("eles saíam", "they were exiting"),
+        ("faça", "do! (polite sing.)"),
+        ("façam", "do! (polite pl.)"),
+        ("façamos", "let's do"),
+        ("eu fora", "I had went (literary), I had been (ser, literary)"),
+        ("foras", "you had went (fam. sing., literary), you had been (fam. sing., ser, literary)"),
+        ("ele fora", "he had went (literary), he had been (ser, literary)"),
+        ("fôramos", "we had went (literary), we had been (ser, literary)"),
     ]:
-        results.append({"question": question, "answer": answer})
-        results.append({"question": answer, "answer": question})
+        data.append({"question": question, "answer": answer})
+        data.append({"question": answer, "answer": question})
 
-    results = pd.DataFrame(results)
-    assert results.question.duplicated().sum() == 0
-    assert results.answer.duplicated().sum() == 0
+    data = pd.DataFrame(data)
+    assert data.question.duplicated().sum() == 0
+    assert data.answer.duplicated().sum() == 0
 
-    return results
+    return data
 
 
 # NOTE: See `https://www.edrdg.org/kanjidic/kanjd2index_legacy.html`.
@@ -442,7 +452,7 @@ def init_kanjidic():
     with open(os.path.join("out", "kanjidic2.xml"), "w") as file:
         file.write(xml)
 
-    results = []
+    data = []
     for character in et.fromstring(xml).iter("character"):
         misc = character.find("misc")
         if misc is None:
@@ -463,6 +473,8 @@ def init_kanjidic():
             if m_lang is None:
                 meaning_en.append(meaning.text.strip().lower())
             elif m_lang == "pt":
+                if meaning.text.strip().lower() == "waº":
+                    continue
                 meaning_pt.append(meaning.text.strip().lower())
 
         if (len(meaning_en) == 0) or (len(meaning_pt) == 0):
@@ -471,7 +483,7 @@ def init_kanjidic():
         grade = misc.find("grade")
         freq = misc.find("freq")
 
-        results.append(
+        data.append(
             {
                 "literal": character.find("literal").text,
                 "meaning_en": meaning_en,
@@ -482,19 +494,20 @@ def init_kanjidic():
             },
         )
 
-    results = pd.DataFrame(results).astype({"grade": "Int64", "freq": "Int64"})
-    results["#_en"] = results.meaning_en.map(len)
-    results["#_pt"] = results.meaning_pt.map(len)
-    results.sort_values(
-        ["#_pt", "grade", "stroke_count", "freq"],
-        ascending=[True, True, True, False],
+    data = pd.DataFrame(data).astype({"grade": "Int64", "freq": "Int64"})
+
+    data.sort_values(
+        ["stroke_count", "freq"],
+        ascending=[True, True],
         ignore_index=True,
         inplace=True,
     )
 
-    results["question"] = results.literal
-    results["answer"] = results.meaning_pt.map(", ".join)
-    return results.loc[results.freq.notnull(), ["question", "answer"]].copy()
+    data.to_csv("kanjidic2.csv", index=False)
+
+    data["question"] = data.literal
+    data["answer"] = data.meaning_pt.map(lambda meaning: meaning[0])
+    return data.loc[data.freq.notnull(), ["question", "answer"]].copy()
 
 
 def main():

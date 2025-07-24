@@ -12,6 +12,9 @@ APP = flask.Flask(__name__)
 
 RNG = np.random.default_rng()
 
+RATE = float(sys.argv[2])
+STEP = int(sys.argv[3])
+
 
 def choice(memory, previous=None):
     memory["weight"] = 0.0
@@ -35,7 +38,7 @@ def choice(memory, previous=None):
                 "size": size,
             },
         )
-        weight *= 1.95
+        weight *= RATE
 
     weights = pd.DataFrame(weights)
     for column in ["weight", "size"]:
@@ -91,7 +94,7 @@ def next():
     )
 
     if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "consec"]).all():
-        memory["mask"].values[: memory["mask"].sum() + 10] = True
+        memory["mask"].values[: memory["mask"].sum() + STEP] = True
 
     memory.to_csv(path, index=False)
 
