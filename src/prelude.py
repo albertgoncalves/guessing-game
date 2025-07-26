@@ -76,6 +76,7 @@ def init_jp():
 def init_pt():
     data = []
 
+    # fmt: off
     for question, answer in [
         ("falo", "I speak"),
         ("falas", "you speak (fam. sing.)"),
@@ -308,13 +309,10 @@ def init_pt():
         ("ias", "you were going (fam. sing.)"),
         ("íamos", "we were going"),
         ("eles iam", "they were going"),
-        ("foste", "you went, you were (fam. sing., ser, pretérito perfeito)"),
+        ("foste", "you went (fam. sing.), you were (fam. sing., ser, pretérito perfeito)"),
         ("ele foi", "he went, he was (ser, pretérito perfeito)"),
         ("fomos", "we went, we were (ser, pretérito perfeito)"),
-        (
-            "eles foram",
-            "they went, they were (ser, pretérito perfeito), they had been (ser, literary)",
-        ),
+        ("eles foram", "they went, they were (ser, pretérito perfeito), they had been (ser, literary)"),
         ("ele esteve", "he was (estar, pretérito perfeito)"),
         ("sou", "I am (ser)"),
         ("és", "you are (fam. sing., ser)"),
@@ -432,7 +430,7 @@ def init_pt():
         ("foras", "you had went (fam. sing., literary), you had been (fam. sing., ser, literary)"),
         ("ele fora", "he had went (literary), he had been (ser, literary)"),
         ("fôramos", "we had went (literary), we had been (ser, literary)"),
-    ]:
+    ]:  # fmt: on:
         data.append({"question": question, "answer": answer})
         data.append({"question": answer, "answer": question})
 
@@ -512,15 +510,7 @@ def init_kanjidic():
 
 def main():
     path = os.path.join("data", f"{sys.argv[1]}.csv")
-
-    if sys.argv[1] == "jp":
-        init = init_jp
-    elif sys.argv[1] == "pt":
-        init = init_pt
-    elif sys.argv[1] == "kanjidic":
-        init = init_kanjidic
-    else:
-        assert False, sys.argv[1]
+    init = eval(f"init_{sys.argv[1]}")
 
     if not os.path.exists(path):
         memory = init()
