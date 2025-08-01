@@ -67,7 +67,7 @@ window.onload = function() {
         let selected = next;
         let response = null;
 
-        question.textContent = selected.question;
+        question.innerHTML = selected.question;
 
         const canvasWeights = getElement("canvas-weights");
         const contextWeights = canvasWeights.getContext("2d");
@@ -109,7 +109,7 @@ window.onload = function() {
                 selected = next;
                 response = null;
 
-                question.textContent = selected.question;
+                question.innerHTML = selected.question;
                 answer.value = "";
                 feedback.textContent = "";
                 draw(canvasWeights,

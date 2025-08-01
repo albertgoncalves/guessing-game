@@ -5,6 +5,7 @@ import os.path
 import sys
 import xml.etree.ElementTree as et
 
+import bs4
 import numpy as np
 import pandas as pd
 import pykakasi
@@ -506,6 +507,107 @@ def init_kanjidic():
     data["question"] = data.literal
     data["answer"] = data.meaning_pt.map(lambda meaning: meaning[0])
     return data.loc[data.freq.notnull(), ["question", "answer"]].copy()
+
+
+# NOTE: See `https://www3.nhk.or.jp/nhkworld/lesson/pt/lessons/`.
+def init_kaishi():
+    kakasi = pykakasi.kakasi()
+
+    data = []
+
+    def tokenize(text):
+        i = 0
+
+        tokens = []
+
+        while True:
+            assert text[i] == '"', (text[i], i)
+            i += 1
+            j = i
+
+            if (i + 1) == len(text):
+                break
+
+            while True:
+                j += 1
+
+                if (text[j] == '"') and (text[j + 1] == '"'):
+                    j += 1
+                    continue
+
+                if (text[j] == '"') and (text[j + 1] != '"'):
+                    break
+
+            token = text[i:j].replace('""', '"').strip()
+            if token != "":
+                tokens.append(token)
+
+            i = j
+
+        return tokens
+
+    with open(os.path.join("data", "Kaishi 1.5k.txt"), "r") as file:
+        lines = file.read()
+        text = lines.split("\n", 2)[-1]
+        for i, token in enumerate(tokenize(text)[2:]):
+            if (i % 2) == 0:
+                continue
+
+            div = bs4.BeautifulSoup(token, "lxml").find("div", {"lang": "ja"})
+
+            question = []
+            answer = div.find("div")
+            kana = []
+
+            for element in [
+                element
+                for element in answer.previous_siblings
+                if not isinstance(element, bs4.element.Comment)
+            ][::-1]:
+                if element.text.strip() == "":
+                    continue
+                if element.name == "ruby":
+                    children = element.children
+                    while True:
+                        try:
+                            rb = next(children)
+                        except StopIteration:
+                            break
+
+                        rt = next(children)
+                        assert (rb.name == "rb") and (rt.name == "rt"), element
+
+                        kana.append(rt.text.strip())
+                        question.append(f"<ruby>{rb.text.strip()}<rt>{rt.text.strip()}</rt></ruby>")
+                else:
+                    assert isinstance(element, bs4.element.NavigableString), element
+                    element = element.strip()
+                    if element == "":
+                        continue
+                    question.append(element)
+                    kana.append(element)
+
+            results = kakasi.convert("".join(kana))
+            assert len(results) == 1, results
+
+            data.append(
+                {
+                    "question": "".join(question),
+                    "answer": f"{results[0]['hepburn']} - {answer.text.strip()}",
+                }
+            )
+
+    data = pd.DataFrame(data)
+    data.drop_duplicates("question", keep="first", ignore_index=True, inplace=True)
+
+    rows = data.question == "<ruby>友<rt>とも</rt></ruby><ruby>達<rt>だち</rt></ruby>"
+    assert rows.sum() == 1
+    assert (data.loc[rows, "answer"] == "tomodachi - Amigo, companhia.").all()
+    data.loc[rows, "answer"] = "tomodachi - amigo, companhia"
+
+    assert data.question.duplicated().sum() == 0
+
+    return data
 
 
 def main():
