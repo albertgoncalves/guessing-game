@@ -14,6 +14,7 @@ RNG = np.random.default_rng()
 
 RATE = float(sys.argv[2])
 STEP = int(sys.argv[3])
+REQ = int(sys.argv[4])
 
 
 def choice(memory, previous=None):
@@ -52,7 +53,7 @@ def choice(memory, previous=None):
 
     print(
         memory.loc[
-            memory.consec.isin(consecs[:3]) & memory["mask"],
+            memory.consec.isin(consecs[:REQ]) & memory["mask"],
             [
                 "question",
                 "consec",
@@ -88,12 +89,12 @@ def next():
     else:
         memory.loc[rows, "consec"] = 0
 
-    rows = 3 <= memory.consec
+    rows = REQ <= memory.consec
     memory.loc[rows, "consec"] = memory.loc[rows, "consec"].map(
-        {consec: i + 3 for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))},
+        {consec: i + REQ for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))},
     )
 
-    if (not (memory["mask"].all())) and (3 <= memory.loc[memory["mask"], "consec"]).all():
+    if (not (memory["mask"].all())) and (REQ <= memory.loc[memory["mask"], "consec"]).all():
         memory["mask"].values[: memory["mask"].sum() + STEP] = True
 
     memory.to_csv(path, index=False)
