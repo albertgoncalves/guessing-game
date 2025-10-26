@@ -5,10 +5,14 @@
 !.shellhook
 
 !src/
-!*.py
+!src/*.py
 
 !src/templates/
-!*.html
+!src/templates/*.html
 
 !src/static/
-!*.js
+!src/static/*.js
+
+!data/
+!data/kanjidic2.xml.gz
+!data/Kaishi\ 1.5k.txt
