@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
-import os.path
+import os
 import sys
 
 import flask
@@ -46,7 +46,6 @@ def choice(memory, previous=None):
         weights[column] /= weights[column].sum()
 
     memory.weight /= memory.weight.sum()
-    memory.to_csv(os.path.join("out", "snapshot.csv"), index=False)
 
     if previous is not None:
         memory.loc[memory.question == previous, "mask"] = True

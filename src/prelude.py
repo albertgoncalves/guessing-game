@@ -657,9 +657,6 @@ def kanjidic():
     with open(os.path.join("data", "kanjidic2.xml.gz"), "rb") as file:
         xml = gzip.decompress(file.read()).decode("utf-8")
 
-    with open(os.path.join("out", "kanjidic2.xml"), "w") as file:
-        file.write(xml)
-
     data = []
     for character in et.fromstring(xml).iter("character"):
         misc = character.find("misc")
