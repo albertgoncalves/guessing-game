@@ -10,6 +10,10 @@ import numpy as np
 import pandas as pd
 import pykakasi
 
+NOTES = "ABCDEFG"
+PITCHES = {"A": 9, "B": 11, "C": 0, "D": 2, "E": 4, "F": 5, "G": 7}
+INTERVALS = {"m3": (2, 3), "M3": (2, 4), "P4": (3, 5), "P5": (4, 7), "m6": (5, 8), "M6": (5, 9)}
+
 
 def jp():
     kakasi = pykakasi.kakasi()
@@ -810,6 +814,59 @@ def kaishi():
 
     assert data.question.duplicated().sum() == 0
 
+    return data
+
+
+def note_to_pitch(note):
+    pitch = PITCHES[note[0]]
+
+    for accidental in note[1:]:
+        if accidental == "b":
+            pitch -= 1
+        elif accidental == "#":
+            pitch += 1
+        else:
+            assert False, accidental
+
+    return pitch % 12
+
+
+def transpose(note_from, interval):
+    (steps, semitones) = INTERVALS[interval]
+
+    note_to = NOTES[(NOTES.index(note_from[0]) + steps) % len(NOTES)]
+    pitch_from = note_to_pitch(note_from)
+    pitch_to = (pitch_from + semitones) % 12
+
+    if pitch_to < PITCHES[note_to]:
+        pitch_to += 12
+
+    above = (PITCHES[note_to] + 12) - pitch_to
+    below = pitch_to - PITCHES[note_to]
+
+    if above <= below:
+        note_to += "b" * above
+    else:
+        note_to += "#" * below
+
+    assert (pitch_to % 12) == note_to_pitch(note_to), (note_from, interval, note_to)
+
+    return note_to
+
+
+def intervals():
+    data = pd.DataFrame(
+        [
+            {
+                "question": f"{note + accidentals} + {interval}",
+                "answer": transpose(note + accidentals, interval),
+            }
+            for interval in INTERVALS.keys()
+            for accidentals in ["", "b", "#"]
+            for note in NOTES
+        ],
+    )
+    assert data.question.duplicated().sum() == 0
     return data
 
 
