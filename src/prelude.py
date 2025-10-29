@@ -707,8 +707,6 @@ def kanjidic():
         inplace=True,
     )
 
-    data.to_csv("kanjidic2.csv", index=False)
-
     data["question"] = data.literal
     data["answer"] = data.meaning_pt.map(lambda meaning: meaning[0])
     return data.loc[data.freq.notnull(), ["question", "answer"]].copy()
