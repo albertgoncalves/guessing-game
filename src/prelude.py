@@ -11,7 +11,7 @@ import pandas as pd
 import pykakasi
 
 
-def init_jp():
+def jp():
     kakasi = pykakasi.kakasi()
 
     data = []
@@ -217,7 +217,7 @@ def init_jp():
     return data
 
 
-def init_pt():
+def pt():
     data = []
 
     # fmt: off
@@ -649,7 +649,7 @@ def init_pt():
 
 # NOTE: See `https://www.edrdg.org/kanjidic/kanjd2index_legacy.html`.
 # NOTE: See `https://github.com/davidluzgouveia/kanji-data/blob/master/tools/kanjidic.py`.
-def init_kanjidic():
+def kanjidic():
     with open(os.path.join("data", "kanjidic2.xml.gz"), "rb") as file:
         xml = gzip.decompress(file.read()).decode("utf-8")
 
@@ -715,7 +715,7 @@ def init_kanjidic():
 
 
 # NOTE: See `https://www3.nhk.or.jp/nhkworld/lesson/pt/lessons/`.
-def init_kaishi():
+def kaishi():
     kakasi = pykakasi.kakasi()
 
     data = []
@@ -817,10 +817,9 @@ def init_kaishi():
 
 def main():
     path = os.path.join("data", f"{sys.argv[1]}.csv")
-    init = eval(f"init_{sys.argv[1]}")
 
     if not os.path.exists(path):
-        memory = init()
+        memory = eval(sys.argv[1])()
 
         memory["consec"] = 0
 
@@ -832,7 +831,7 @@ def main():
         memory.to_csv(path, index=False)
     else:
         old = pd.read_csv(path)
-        new = init()
+        new = eval(sys.argv[1])()
 
         missing = new.loc[~new.question.isin(old.question)].copy()
         if len(missing) == 0:
