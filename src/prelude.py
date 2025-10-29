@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import gzip
-import os.path
+import os
 import sys
 import xml.etree.ElementTree as et
 
