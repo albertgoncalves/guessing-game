@@ -6,4 +6,3 @@ alias jshint='jshint --verbose "$PWD/.jshintrc"'
 alias tsc="tsc --noEmit --strict --checkJs --pretty --noImplicitAny false"
 
 mkdir -p data/
-mkdir -p out/
