@@ -422,7 +422,7 @@ def pt():
         ("você fica", "you stay (polite sing.)"),
         ("ponho", "I put (presente)"),
         ("pões", "you put (fam. sing., presente)"),
-        ("ele põe", "he put (presente)"),
+        ("ele põe", "he puts (presente)"),
         ("pomos", "we put (presente)"),
         ("eles põem", "they put (presente)"),
         ("pus", "I put (pretérito perfeito)"),
