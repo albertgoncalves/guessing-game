@@ -586,7 +586,7 @@ def pt():
         ("permanecer", "to remain, to continue"),
         ("promover", "to promote, to foster, to sponsor"),
         ("perceber", "to realize"),
-        ("conseguir", "to get, to achieve"),
+        ("conseguir", "to acquire, to achieve"),
         ("surgir", "to arise, to emerge"),
         ("buscar", "to search, to fetch"),
         ("atravessar", "to cross, to traverse"),
