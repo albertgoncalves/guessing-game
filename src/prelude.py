@@ -647,7 +647,7 @@ def pt():
         ("faláramos", "we had spoken (literary)"),
         ("eu vendera", "I had sold (literary)"),
         ("venderas", "you had sold (fam. sing., literary)"),
-        ("ele vendera ", "he had sold (literary)"),
+        ("ele vendera", "he had sold (literary)"),
         ("vendêramos", "we had sold (literary)"),
         ("eu partira", "I had departed (literary)"),
         ("partiras", "you had departed (fam. sing., literary)"),
