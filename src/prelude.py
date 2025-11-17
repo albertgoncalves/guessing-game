@@ -385,7 +385,7 @@ def pt():
         ("eles veem", "they see"),
         ("eles viram", "they saw"),
         ("eles viam", "they were seeing"),
-        ("eles vieram", "they came, they had done (literary)"),
+        ("eles vieram", "they came, they had come (literary)"),
         ("eles vinham", "they were coming"),
         ("eles vêm", "they come"),
         ("dou", "I give"),
