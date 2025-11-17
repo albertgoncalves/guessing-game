@@ -427,7 +427,7 @@ def pt():
         ("eles põem", "they put (presente)"),
         ("pus", "I put (pretérito perfeito)"),
         ("puseste", "you put (fam. sing., pretérito perfeito)"),
-        ("ele pôs", "he put (pretérito perfeito)"),
+        ("ele pôs", "he put"),
         ("pusemos", "we put (pretérito perfeito)"),
         ("eles puseram", "they put (pretérito perfeito), they had put (literary)"),
         ("eu punha", "I was putting"),
