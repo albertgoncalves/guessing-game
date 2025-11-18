@@ -383,7 +383,7 @@ def pt():
         ("vi", "I saw"),
         ("eu via", "I was seeing"),
         ("eles veem", "they see"),
-        ("eles viram", "they saw"),
+        ("eles viram", "they saw, they had seen (literary)"),
         ("eles viam", "they were seeing"),
         ("eles vieram", "they came, they had come (literary)"),
         ("eles vinham", "they were coming"),
