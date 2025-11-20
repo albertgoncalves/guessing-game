@@ -916,10 +916,17 @@ def kaishi():
     data = pd.DataFrame(data)
     data.drop_duplicates("question", keep="first", ignore_index=True, inplace=True)
 
-    rows = data.question == "<ruby>友<rt>とも</rt></ruby><ruby>達<rt>だち</rt></ruby>"
-    assert rows.sum() == 1
-    assert (data.loc[rows, "answer"] == "tomodachi - Amigo, companhia.").all()
-    data.loc[rows, "answer"] = "tomodachi - amigo, companhia"
+    for question, answer, replacement in [
+        (
+            "<ruby>友<rt>とも</rt></ruby><ruby>達<rt>だち</rt></ruby>",
+            "tomodachi - Amigo, companhia.",
+            "tomodachi - amigo, companhia",
+        ),
+    ]:
+        rows = data.question == question
+        assert rows.sum() == 1
+        assert (data.loc[rows, "answer"] == answer).all()
+        data.loc[rows, "answer"] = replacement
 
     assert data.question.duplicated().sum() == 0
 
