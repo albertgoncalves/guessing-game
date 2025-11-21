@@ -922,6 +922,24 @@ def kaishi():
             "tomodachi - Amigo, companhia.",
             "tomodachi - amigo, companhia",
         ),
+        (
+            "<ruby>私<rt>わたし</rt></ruby>",
+            "watashi - eu (formal, uso geral)",
+            "watashi - eu (forma formal, uso geral)",
+        ),
+        ("はい", "hai - sim (formal)", "hai - sim (forma formal)"),
+        ("いいえ", "iie - não (formal)", "iie - não (forma formal)"),
+        (
+            "ありがとうございます",
+            "arigatougozaimasu - obrigado (formal)",
+            "arigatougozaimasu - obrigado (forma formal)",
+        ),
+        (
+            "<ruby>我<rt>われ</rt></ruby><ruby>々<rt>われ</rt></ruby>",
+            "wareware - nós (formal)",
+            "wareware - nós (forma formal)",
+        ),
+        ("お<ruby>茶<rt>ちゃ</rt></ruby>", "ocha - chá (formal)", "ocha - chá (forma formal)"),
     ]:
         rows = data.question == question
         assert rows.sum() == 1
