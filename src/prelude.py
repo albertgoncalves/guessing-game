@@ -1133,6 +1133,7 @@ def main():
         memory["mask"] = mask
 
         memory.to_csv(path, index=False)
+        print(f"Created {len(memory)} new question(s)! ({path})")
     else:
         old = pd.read_csv(path)
         new = eval(sys.argv[1])()
@@ -1152,7 +1153,7 @@ def main():
             assert combined.answer.duplicated().sum() == 0
 
         combined.to_csv(path, index=False)
-        print(f"Added {len(missing)} new questions!")
+        print(f"Added {len(missing)} new question(s)! ({path})")
 
 
 if __name__ == "__main__":
