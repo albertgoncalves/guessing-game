@@ -929,8 +929,8 @@ def kanjidic():
     data = pd.DataFrame(data).astype({"grade": "Int64", "freq": "Int64"})
 
     data.sort_values(
-        ["stroke_count", "freq"],
-        ascending=[True, True],
+        ["freq"],
+        ascending=[True],
         ignore_index=True,
         inplace=True,
     )
