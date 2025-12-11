@@ -838,7 +838,7 @@ def pt():
         ("espero que sejamos", "I hope that we are (ser)"),
         ("espero que eles sejam", "I hope that they are (ser)"),
         ("espero que eu esteja", "I hope that I am (estar)"),
-        ("espero que estajas", "I hope that you are (fam. sing., estar)"),
+        ("espero que estejas", "I hope that you are (fam. sing., estar)"),
         ("espero que ele esteja", "I hope that he is (estar)"),
         ("espero que estejamos", "I hope that we are (estar)"),
         ("espero que eles estejam", "I hope that they are (estar)"),
