@@ -8,13 +8,23 @@ import flask
 import numpy as np
 import pandas as pd
 
+from prelude import MASK_MIN
+
 APP = flask.Flask(__name__)
 
 RNG = np.random.default_rng()
 
-RATE = float(sys.argv[2])
-STEP = int(sys.argv[3])
-REQ = int(sys.argv[4])
+WEIGHT_RATE = float(sys.argv[2])
+
+CORRECT_STEP = int(sys.argv[3])
+INCORRECT_STEP = CORRECT_STEP * 3
+
+CONSEC_REQ = int(sys.argv[4])
+
+HISTORY = []
+
+HISTORY_CAP = 10
+HISTORY_MIN = 6
 
 
 def choice(memory, previous=None):
@@ -39,7 +49,7 @@ def choice(memory, previous=None):
                 "size": size,
             },
         )
-        weight *= RATE
+        weight *= WEIGHT_RATE
 
     weights = pd.DataFrame(weights)
     for column in ["weight", "size"]:
@@ -52,7 +62,7 @@ def choice(memory, previous=None):
 
     print(
         memory.loc[
-            memory.consec.isin(consecs[:REQ]) & memory["mask"],
+            memory.consec.isin(consecs[:CONSEC_REQ]) & memory["mask"],
             [
                 "question",
                 "consec",
@@ -83,18 +93,38 @@ def next():
     rows = memory.question == body["previous"]
     assert rows.sum() == 1, body["previous"]
 
-    if body["response"] is None:
+    correct = body["response"] is None
+
+    HISTORY.insert(0, correct)
+
+    if HISTORY_CAP < len(HISTORY):
+        HISTORY.pop()
+        assert len(HISTORY) == HISTORY_CAP, HISTORY
+
+    k = memory["mask"].sum()
+
+    if correct:
         memory.loc[rows, "consec"] += 1
+
+        rows = CONSEC_REQ <= memory.consec
+        memory.loc[rows, "consec"] = memory.loc[rows, "consec"].map(
+            {
+                consec: i + CONSEC_REQ
+                for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))
+            },
+        )
+
+        if (not (memory["mask"].all())) and (
+            CONSEC_REQ <= memory.loc[memory["mask"], "consec"]
+        ).all():
+            memory["mask"].values[: k + CORRECT_STEP] = True
+
     else:
         memory.loc[rows, "consec"] = 0
 
-    rows = REQ <= memory.consec
-    memory.loc[rows, "consec"] = memory.loc[rows, "consec"].map(
-        {consec: i + REQ for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))},
-    )
-
-    if (not (memory["mask"].all())) and (REQ <= memory.loc[memory["mask"], "consec"]).all():
-        memory["mask"].values[: memory["mask"].sum() + STEP] = True
+        if (len(HISTORY) == HISTORY_CAP) and (sum(HISTORY) < HISTORY_MIN):
+            HISTORY.clear()
+            memory["mask"].values[max(MASK_MIN, k - INCORRECT_STEP) :] = False
 
     memory.to_csv(path, index=False)
 

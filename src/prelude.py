@@ -14,6 +14,8 @@ NOTES = "ABCDEFG"
 PITCHES = {"A": 9, "B": 11, "C": 0, "D": 2, "E": 4, "F": 5, "G": 7}
 INTERVALS = {"m3": (2, 3), "M3": (2, 4), "P4": (3, 5), "P5": (4, 7), "m6": (5, 8), "M6": (5, 9)}
 
+MASK_MIN = 10
+
 
 def jp():
     kakasi = pykakasi.kakasi()
@@ -1123,7 +1125,7 @@ def main():
         memory["consec"] = 0
 
         mask = np.zeros(len(memory), dtype=np.bool)
-        mask[:10] = True
+        mask[:MASK_MIN] = True
 
         memory["mask"] = mask
 
