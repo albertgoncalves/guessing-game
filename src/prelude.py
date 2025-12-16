@@ -323,6 +323,7 @@ def jp():
         "おひさしぶりです",
         "ひさしぶり",
         "おげんきですか",
+        "まっちゃ",
     ]:
         result = kakasi.convert(word)
         assert len(result) == 1, result
@@ -927,12 +928,7 @@ def kanjidic():
 
     data = pd.DataFrame(data).astype({"grade": "Int64", "freq": "Int64"})
 
-    data.sort_values(
-        ["freq"],
-        ascending=[True],
-        ignore_index=True,
-        inplace=True,
-    )
+    data.sort_values(["freq"], ascending=[True], ignore_index=True, inplace=True)
 
     data["question"] = data.literal
     data["answer"] = data.meaning_pt.map(lambda meaning: meaning[0])
