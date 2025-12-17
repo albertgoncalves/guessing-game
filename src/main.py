@@ -62,13 +62,15 @@ def choice(memory, previous=None):
 
     print(
         memory.loc[
-            memory.consec.isin(consecs[:CONSEC_REQ]) & memory["mask"],
+            memory.consec.isin(consecs[consecs < CONSEC_REQ]) & memory["mask"],
             [
                 "question",
                 "consec",
                 "weight",
             ],
-        ].sort_values("consec"),
+        ]
+        .sort_values("consec")
+        .to_string(index=False),
     )
 
     selected = memory.iloc[RNG.choice(len(memory), size=1, p=memory.weight, shuffle=False)[0]]
