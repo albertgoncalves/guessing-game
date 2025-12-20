@@ -73,7 +73,14 @@ def choice(memory, previous=None):
         .to_string(index=False),
     )
 
-    selected = memory.iloc[RNG.choice(len(memory), size=1, p=memory.weight, shuffle=False)[0]]
+    k = memory["mask"].sum()
+    print(
+        round((CONSEC_REQ <= memory.loc[memory["mask"], "consec"]).sum() / k, 2),
+        k,
+        round(k / len(memory), 2),
+    )
+
+    selected = memory.sample(n=1, weights=memory.weight, random_state=RNG).iloc[0]
     return {
         "question": selected.question,
         "answer": selected.answer,
@@ -103,8 +110,6 @@ def next():
         HISTORY.pop()
         assert len(HISTORY) == HISTORY_CAP, HISTORY
 
-    k = memory["mask"].sum()
-
     if correct:
         memory.loc[rows, "consec"] += 1
 
@@ -119,14 +124,14 @@ def next():
         if (not (memory["mask"].all())) and (
             CONSEC_REQ <= memory.loc[memory["mask"], "consec"]
         ).all():
-            memory["mask"].values[: k + CORRECT_STEP] = True
+            memory["mask"].values[: memory["mask"].sum() + CORRECT_STEP] = True
 
     else:
         memory.loc[rows, "consec"] = 0
 
         if (len(HISTORY) == HISTORY_CAP) and (sum(HISTORY) < HISTORY_MIN):
             HISTORY.clear()
-            memory["mask"].values[max(MASK_MIN, k - INCORRECT_STEP) :] = False
+            memory["mask"].values[max(MASK_MIN, memory["mask"].sum() - INCORRECT_STEP) :] = False
 
     memory.to_csv(path, index=False)
 
