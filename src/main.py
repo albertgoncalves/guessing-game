@@ -75,9 +75,9 @@ def choice(memory, previous=None):
 
     k = memory["mask"].sum()
     print(
-        round((CONSEC_REQ <= memory.loc[memory["mask"], "consec"]).sum() / k, 2),
+        round((CONSEC_REQ <= memory.loc[memory["mask"], "consec"]).sum() / k, 3),
         k,
-        round(k / len(memory), 2),
+        round(k / len(memory), 3),
     )
 
     selected = memory.sample(n=1, weights=memory.weight, random_state=RNG).iloc[0]
