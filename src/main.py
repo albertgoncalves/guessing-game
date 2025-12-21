@@ -127,7 +127,7 @@ def next():
             memory["mask"].values[: memory["mask"].sum() + CORRECT_STEP] = True
 
     else:
-        memory.loc[rows, "consec"] = 0
+        memory.loc[rows | (memory["mask"] & (memory.answer == body["response"])), "consec"] = 0
 
         if (len(HISTORY) == HISTORY_CAP) and (sum(HISTORY) < HISTORY_MIN):
             HISTORY.clear()
