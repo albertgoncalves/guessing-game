@@ -935,9 +935,13 @@ def kanjidic():
     data["question"] = data.literal
     data["answer"] = data.meaning_pt.map(lambda meaning: meaning[0])
 
-    rows = data.question == "弦"
-    assert rows.sum() == 1
-    data.loc[rows, "answer"] = "corda (arco violão)"
+    for question, answer in [
+        ("弦", "corda (arco violão)"),
+        ("皿", "prato (tipo)"),
+    ]:
+        rows = data.question == question
+        assert rows.sum() == 1
+        data.loc[rows, "answer"] = answer
 
     return data.loc[data.freq.notnull(), ["question", "answer"]].copy()
 
