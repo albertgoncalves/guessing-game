@@ -30,45 +30,45 @@ HISTORY_MIN = 6
 def choice(memory, previous=None):
     memory["weight"] = 0.0
 
+    rows = memory["mask"]
+
     if previous is not None:
-        memory.loc[memory.question == previous, "mask"] = False
+        rows &= memory.question != previous
 
-    consecs = np.sort(memory.loc[memory["mask"], "consec"].unique())
+    consecs = np.flip(np.sort(memory.loc[rows, "consec"].unique()))
+    weights = np.empty(len(consecs))
 
-    weights = []
     weight = 1
-    for consec in np.flip(consecs):
-        rows = (memory.consec == consec) & memory["mask"]
-        size = rows.sum()
-        assert size != 0, consec
-        memory.loc[rows, "weight"] = weight / size
-        weights.append(
-            {
-                "consec": consec,
-                "weight": weight,
-                "size": size,
-            },
-        )
+    for i in range(len(consecs)):
+        weights[i] = weight
         weight *= WEIGHT_RATE
 
-    weights = pd.DataFrame(weights)
-    for column in ["weight", "size"]:
-        weights[column] /= weights[column].sum()
+    weights /= sum(weights)
 
-    memory.weight /= memory.weight.sum()
+    selected = (
+        memory.loc[(memory.consec == RNG.choice(consecs, 1, p=weights)[0]) & rows]
+        .sample(n=1, random_state=RNG)
+        .iloc[0]
+    )
 
-    if previous is not None:
-        memory.loc[memory.question == previous, "mask"] = True
+    weights = (
+        memory.loc[rows]
+        .groupby("consec")
+        .agg(size=("question", "count"))
+        .merge(
+            pd.DataFrame({"consec": consecs, "weight": weights}),
+            on="consec",
+            how="right",
+            validate="1:1",
+        )
+    )
+    assert weights.notnull().values.all()
 
+    weights["size"] /= weights["size"].sum()
+
+    print()
     print(
-        memory.loc[
-            memory.consec.isin(consecs[consecs < CONSEC_REQ]) & memory["mask"],
-            [
-                "question",
-                "consec",
-                "weight",
-            ],
-        ]
+        memory.loc[(memory.consec < CONSEC_REQ) & memory["mask"], ["question", "consec"]]
         .sort_values("consec")
         .to_string(index=False),
     )
@@ -80,7 +80,6 @@ def choice(memory, previous=None):
         round(k / len(memory), 3),
     )
 
-    selected = memory.sample(n=1, weights=memory.weight, random_state=RNG).iloc[0]
     return {
         "question": selected.question,
         "answer": selected.answer,
