@@ -28,12 +28,10 @@ HISTORY_MIN = 6
 
 
 def choice(memory, previous=None):
-    memory["weight"] = 0.0
-
-    rows = memory["mask"]
-
-    if previous is not None:
-        rows &= memory.question != previous
+    if previous is None:
+        rows = memory["mask"]
+    else:
+        rows = memory["mask"] & (memory.question != previous)
 
     consecs = np.flip(np.sort(memory.loc[rows, "consec"].unique()))
     weights = np.empty(len(consecs))
