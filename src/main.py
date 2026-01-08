@@ -15,16 +15,26 @@ APP = flask.Flask(__name__)
 RNG = np.random.default_rng()
 
 WEIGHT_RATE = float(sys.argv[2])
+assert 1.0 < WEIGHT_RATE, WEIGHT_RATE
 
 CORRECT_STEP = int(sys.argv[3])
+assert 0 < CORRECT_STEP, CORRECT_STEP
+
 INCORRECT_STEP = CORRECT_STEP * 3
 
 CONSEC_REQ = int(sys.argv[4])
-
-HISTORY = []
+assert 0 < CONSEC_REQ, CONSEC_REQ
 
 HISTORY_CAP = 10
+assert 0 < HISTORY_CAP, HISTORY_CAP
+
 HISTORY_MIN = 6
+assert 0 < HISTORY_MIN, HISTORY_MIN
+
+HISTORY_PENALTY = 0.1
+assert HISTORY_PENALTY < 0.5, HISTORY_PENALTY
+
+HISTORY = []
 
 
 def choice(memory, previous=None):
@@ -43,15 +53,25 @@ def choice(memory, previous=None):
 
     weights /= sum(weights)
 
-    selected = (
-        memory.loc[(memory.consec == RNG.choice(consecs, 1, p=weights)[0]) & rows]
-        .sample(n=1, random_state=RNG)
-        .iloc[0]
-    )
+    subset = memory.loc[(memory.consec == RNG.choice(consecs, 1, p=weights)[0]) & rows].copy()
+    subset["in_history"] = subset.question.isin([pair[0] for pair in HISTORY])
+
+    if subset.in_history.nunique() == 1:
+        selected = subset.sample(n=1, random_state=RNG).iloc[0]
+    else:
+        subset_weights = subset.groupby("in_history", as_index=False).agg(
+            freq=("question", "nunique"),
+        )
+        subset_weights["weight"] = subset_weights.in_history.map(
+            lambda in_history: HISTORY_PENALTY if in_history else 1.0 - HISTORY_PENALTY,
+        )
+        subset_weights.weight /= subset_weights.freq
+        subset = subset.merge(subset_weights, on="in_history", how="left", validate="m:1")
+        selected = subset.sample(n=1, weights=subset.weight, random_state=RNG).iloc[0]
 
     weights = (
         memory.loc[rows]
-        .groupby("consec")
+        .groupby("consec", as_index=False)
         .agg(size=("question", "count"))
         .merge(
             pd.DataFrame({"consec": consecs, "weight": weights}),
@@ -101,7 +121,7 @@ def next():
 
     correct = body["response"] is None
 
-    HISTORY.insert(0, correct)
+    HISTORY.insert(0, (body["previous"], correct))
 
     if HISTORY_CAP < len(HISTORY):
         HISTORY.pop()
@@ -126,7 +146,7 @@ def next():
     else:
         memory.loc[rows | (memory["mask"] & (memory.answer == body["response"])), "consec"] = 0
 
-        if (len(HISTORY) == HISTORY_CAP) and (sum(HISTORY) < HISTORY_MIN):
+        if (len(HISTORY) == HISTORY_CAP) and (sum([pair[1] for pair in HISTORY]) < HISTORY_MIN):
             HISTORY.clear()
             memory["mask"].values[max(MASK_MIN, memory["mask"].sum() - INCORRECT_STEP) :] = False
 
