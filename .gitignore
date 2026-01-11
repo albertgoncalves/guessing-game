@@ -4,6 +4,10 @@
 !*.nix
 !.shellhook
 
+!.clang-format
+!.jshintrc
+!.tidyrc
+
 !src/
 !src/*.py
 
