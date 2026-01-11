@@ -938,6 +938,10 @@ def kanjidic():
     for question, answer in [
         ("弦", "corda (arco violão)"),
         ("皿", "prato (tipo)"),
+        ("親", "parente"),
+        ("再", "segundo tempo"),
+        ("又", "além disso"),
+        ("資", "recursos"),
     ]:
         rows = data.question == question
         assert rows.sum() == 1
