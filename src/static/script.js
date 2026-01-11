@@ -118,7 +118,7 @@ window.onload = function() {
                      contextSizes,
                      selected.consec,
                      selected.weights);
-            }, {previous: selected.question, response});
+            }, response);
         };
 
         answer.focus();

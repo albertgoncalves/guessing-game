@@ -8,8 +8,6 @@ import flask
 import numpy as np
 import pandas as pd
 
-from prelude import MASK_MIN
-
 APP = flask.Flask(__name__)
 
 RNG = np.random.default_rng()
@@ -20,28 +18,17 @@ assert 1.0 < WEIGHT_RATE, WEIGHT_RATE
 CORRECT_STEP = int(sys.argv[3])
 assert 0 < CORRECT_STEP, CORRECT_STEP
 
-INCORRECT_STEP = CORRECT_STEP * 3
-
 CONSEC_REQ = int(sys.argv[4])
 assert 0 < CONSEC_REQ, CONSEC_REQ
 
-HISTORY_CAP = 10
-assert 0 < HISTORY_CAP, HISTORY_CAP
-
-HISTORY_MIN = 6
-assert 0 < HISTORY_MIN, HISTORY_MIN
-
-HISTORY_PENALTY = 0.1
-assert HISTORY_PENALTY < 0.5, HISTORY_PENALTY
-
-HISTORY = []
+VISITED = []
 
 
-def choice(memory, previous=None):
-    if previous is None:
+def choice(memory):
+    if len(VISITED) == 0:
         rows = memory["mask"]
     else:
-        rows = memory["mask"] & (memory.question != previous)
+        rows = memory["mask"] & (memory.question != VISITED[-1])
 
     consecs = np.flip(np.sort(memory.loc[rows, "consec"].unique()))
     weights = np.empty(len(consecs))
@@ -54,20 +41,25 @@ def choice(memory, previous=None):
     weights /= sum(weights)
 
     subset = memory.loc[(memory.consec == RNG.choice(consecs, 1, p=weights)[0]) & rows].copy()
-    subset["in_history"] = subset.question.isin([pair[0] for pair in HISTORY])
+    assert 0 < len(subset)
 
-    if subset.in_history.nunique() == 1:
-        selected = subset.sample(n=1, random_state=RNG).iloc[0]
-    else:
-        subset_weights = subset.groupby("in_history", as_index=False).agg(
-            freq=("question", "nunique"),
-        )
-        subset_weights["weight"] = subset_weights.in_history.map(
-            lambda in_history: HISTORY_PENALTY if in_history else 1.0 - HISTORY_PENALTY,
-        )
-        subset_weights.weight /= subset_weights.freq
-        subset = subset.merge(subset_weights, on="in_history", how="left", validate="m:1")
-        selected = subset.sample(n=1, weights=subset.weight, random_state=RNG).iloc[0]
+    subset["visited"] = False
+
+    for question in VISITED[-2::-1]:
+        if (~subset.visited).sum() == 1:
+            break
+
+        subset.visited |= subset.question == question
+
+    selected = subset.loc[~subset.visited].sample(n=1, random_state=RNG).iloc[0]
+
+    try:
+        VISITED.pop(VISITED.index(selected.question))
+    except ValueError:
+        pass
+
+    VISITED.append(selected.question)
+    assert len(VISITED) == len(set(VISITED))
 
     weights = (
         memory.loc[rows]
@@ -113,21 +105,13 @@ def next():
     path = os.path.join("data", f"{sys.argv[1]}.csv")
     memory = pd.read_csv(path)
 
-    if body is None:
+    if len(VISITED) == 0:
         return choice(memory)
 
-    rows = memory.question == body["previous"]
-    assert rows.sum() == 1, body["previous"]
+    rows = memory.question == VISITED[-1]
+    assert rows.sum() == 1, VISITED[-1]
 
-    correct = body["response"] is None
-
-    HISTORY.insert(0, (body["previous"], correct))
-
-    if HISTORY_CAP < len(HISTORY):
-        HISTORY.pop()
-        assert len(HISTORY) == HISTORY_CAP, HISTORY
-
-    if correct:
+    if body is None:
         memory.loc[rows, "consec"] += 1
 
         rows = CONSEC_REQ <= memory.consec
@@ -144,15 +128,12 @@ def next():
             memory["mask"].values[: memory["mask"].sum() + CORRECT_STEP] = True
 
     else:
-        memory.loc[rows | (memory["mask"] & (memory.answer == body["response"])), "consec"] = 0
-
-        if (len(HISTORY) == HISTORY_CAP) and (sum([pair[1] for pair in HISTORY]) < HISTORY_MIN):
-            HISTORY.clear()
-            memory["mask"].values[max(MASK_MIN, memory["mask"].sum() - INCORRECT_STEP) :] = False
+        assert isinstance(body, str), body
+        memory.loc[rows | (memory["mask"] & (memory.answer == body)), "consec"] = 0
 
     memory.to_csv(path, index=False)
 
-    return choice(memory, body["previous"])
+    return choice(memory)
 
 
 @APP.route("/")
