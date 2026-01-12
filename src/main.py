@@ -31,14 +31,9 @@ def choice(memory):
         rows = memory["mask"] & (memory.question != VISITED[-1])
 
     consecs = np.flip(np.sort(memory.loc[rows, "consec"].unique()))
-    weights = np.empty(len(consecs))
 
-    weight = 1
-    for i in range(len(consecs)):
-        weights[i] = weight
-        weight *= WEIGHT_RATE
-
-    weights /= sum(weights)
+    weights = np.cumprod(np.full(len(consecs), WEIGHT_RATE))
+    weights /= np.sum(weights)
 
     subset = memory.loc[(memory.consec == RNG.choice(consecs, 1, p=weights)[0]) & rows].copy()
     assert 0 < len(subset)
