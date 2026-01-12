@@ -942,6 +942,7 @@ def kanjidic():
         ("再", "segundo tempo"),
         ("又", "além disso"),
         ("資", "recursos"),
+        ("済", "terminar"),
     ]:
         rows = data.question == question
         assert rows.sum() == 1
