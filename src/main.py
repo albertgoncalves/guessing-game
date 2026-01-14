@@ -112,7 +112,7 @@ def next():
         rows = CONSEC_REQ <= memory.consec
         memory.loc[rows, "consec"] = memory.loc[rows, "consec"].map(
             {
-                consec: i + CONSEC_REQ
+                consec: min((CONSEC_REQ + 1) * 2, i + CONSEC_REQ)
                 for i, consec in enumerate(np.sort(memory.loc[rows, "consec"].unique()))
             },
         )
