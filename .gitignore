@@ -17,6 +17,7 @@
 !src/static/
 !src/static/*.js
 
-!data/
-!data/kanjidic2.xml.gz
-!data/Kaishi\ 1.5k.txt
+!assets/
+!assets/jp.txt
+!assets/Kaishi\ 1.5k.txt
+!assets/kanjidic2.xml.gz
