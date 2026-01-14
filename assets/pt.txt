@@ -578,3 +578,35 @@ encabular, to embarrass
 irritado, angry
 zangar-se, to get angry
 o carvão, coal
+intrigar, to intrigue, to puzzle
+o gatilho, trigger
+o surto, burst, outbreak, surge
+tirar, to take off
+a fonte, source
+obcecar, to obsess
+o bezerro, calf
+bizarro, bizarre
+a pulga, flea
+a orelha, ear
+a pegadinha, prank
+encerrar, to close, to wrap up
+o recado, message
+ciente, aware
+leio, I read (presente)
+lês, you read (fam. sing., presente)
+ele lê, he reads
+lemos, we read (presente), we read (pretérito, perfeito)
+eles leem, they read (presente)
+espero que eu leia, I hope that I read
+espero que leias, I hope that you read (fam. sing.)
+espero que ele leia, I hope that he reads
+espero que leiamos, I hope that we read
+espero que eles leiam, I hope that they read
+se eu lesse, if I read
+se lesses, if you read (fam. sing.)
+se ele lesse, if he read
+se lêssemos, if we read
+se eles lessem, if they read
+leia, read! (polite sing.)
+leiamos, let's read
+leiam, read! (polite pl.)
