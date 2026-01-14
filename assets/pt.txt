@@ -358,7 +358,7 @@ pegar, to catch, to grab
 pagar, to pay
 permanecer, to continue, to remain
 promover, to foster, to promote, to sponsor
-perceber, to realize
+perceber, to realize, to understand
 conseguir, to achieve, to acquire
 surgir, to arise, to emerge
 buscar, to fetch, to search
@@ -618,3 +618,90 @@ o rumo, direction, tack
 o ramo, branch
 o percurso, course, path
 o trajecto, route
+pacato, calm, quiet
+a amizade, friendship
+a oportunidade, chance
+a vez, instance
+faz favor, excuse me
+o dia, day
+o cartão, card
+prender, to arrest
+aprender, to learn
+apreender, to comprehend
+suceder, to come next, to happen
+o carinho, affection, tenderness
+a realização, accomplishment, achievement
+consentir, to allow, to approve
+o relato, account, report, story
+afastar, to move away
+apertar, to press, to squeeze, to tighten
+apertado, cramped, tight
+abalado, shaken, shocked, undermined
+abalar, to shake, to shock, to undermine
+disposto, ready, willing
+avidamente, eagerly, greedily
+a faísca, spark
+a travessura, mischief
+a bronca, reprimand
+ralhar, to scold
+sumir, to disappear, to fade
+a sacada, balcony, practical advice
+sorrir, to smile
+o constrangimento, embarrassment
+esconder, to hide
+escolher, to select
+fundir, to merge
+findar, to end
+fingir, to fake, to pretend
+subir, to climb, to increase
+a folha, leaf, sheet of paper
+atônito, astonished
+despencar, to nosedive, to plummet
+o gole, sip
+o pires, saucer
+doer, to ache, to hurt
+doar, to donate
+a soneca, nap, snooze
+elogiar, to praise
+ajoelhar-se, to kneel down
+alegrar-se, to become happy, to cheer up
+apaixonar-se, to fall in love
+arrepender-se, to regret
+arrumar-se, to get dressed, to get ready
+assustar-se, to get scared
+barbear-se, to shave
+chamar-se, to be named
+deitar-se, to lie down, to go to bed
+despedir-se, to say goodbye
+dirigir-se, to address someone, to make your way somewhere
+divertir-se, to have fun
+emocionar-se, to get emotional
+enganar-se, to be mistaken, to be wrong
+enxugar-se, to dry oneself
+esquecer-se, to forget
+lembrar-se, to remember
+levantar-se, to get up
+machucar-se, to get hurt
+maquiar-se, to put makeup on
+ofender-se, to become offended
+pentear-se, to comb one's hair
+preocupar-se, to worry
+sentar-se, to sit
+sentir-se, to feel a certain way
+suicidar-se, to commit suicide
+trocar-se, to get changed
+vestir-se, to get dressed
+virar-se, to turn around
+o caçula, youngest child
+rodar, to run, to swivel
+espalhar, to scatter, to spread out
+rolar, to roll, to scroll
+descontrair, to relax, to unwind
+descontraído, casual, relaxed
+úmido, humid, wet
+aguado, watery
+o mato, bush
+encostar, to pull over
+largado, dropped
+a mata, forest
+arrepiar, to get goose bumps, to shiver
