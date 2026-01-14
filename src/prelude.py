@@ -937,7 +937,7 @@ def pt():
 # NOTE: See `https://www.edrdg.org/kanjidic/kanjd2index_legacy.html`.
 # NOTE: See `https://github.com/davidluzgouveia/kanji-data/blob/master/tools/kanjidic.py`.
 def kanjidic():
-    with open(os.path.join("data", "kanjidic2.xml.gz"), "rb") as file:
+    with open(os.path.join("assets", "kanjidic2.xml.gz"), "rb") as file:
         xml = gzip.decompress(file.read()).decode("utf-8")
 
     data = []
@@ -1042,7 +1042,7 @@ def kaishi():
 
         return tokens
 
-    with open(os.path.join("data", "Kaishi 1.5k.txt"), "r") as file:
+    with open(os.path.join("assets", "Kaishi 1.5k.txt"), "r") as file:
         lines = file.read()
         text = lines.split("\n", 2)[-1]
         for i, token in enumerate(tokenize(text)[2:]):
