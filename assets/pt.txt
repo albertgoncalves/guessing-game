@@ -531,11 +531,11 @@ não faz mal, no worries
 foi sem querer, my bad
 o ensejo, intention, occasion, opportunity
 figurar, to appear, to represent
-a vizinhança, neighbourhood, vicinity
+a vizinhança, neighborhood, vicinity
 ríspido, harsh
 soltar, to drop, to loosen, to release
 arrastar, to drag, to pull
-pressentir, to feel, to sense
+pressentir, to foresee, to sense
 insinuar, to imply, to insinuate
 claro, clear, light
 torto, crooked, uneven
@@ -735,3 +735,29 @@ puxar, to pull
 empurrar, to push
 o batido, smoothie
 a batida, crash, strike
+o fardo, burden
+a gentileza, kindness
+o receio, fear, worry
+recear, to fear
+escorrer, to drip, to trickle
+efectuar, to put into action, to perform
+o encanto, allure, charm
+recorrer, to appeal to, to turn to
+a aposta, bet, gamble
+precipitar, to cause an event to happen suddenly
+agudo, acute, sharp
+prever, to anticipate, to predict
+rebentar, to burst
+acolher, to receive, to welcome
+retratar, to depict, to portray
+o visto, visa
+a vista, sight, view
+pisar, to step
+perder, to lose, to misplace
+desperdiçar, to waste
+prover, to provide
+provir, to originate from
+o camaleão, chameleon
+a ave, bird
+a tarde, afternoon, evening
+tarde, late
