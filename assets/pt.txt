@@ -762,3 +762,7 @@ a ave, bird
 a tarde, afternoon, evening
 tarde, late
 escorregar, to slip
+o relance, glimpse
+o vislumbre, glimmer
+safada, naughty
+regrado, orderly
