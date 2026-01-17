@@ -766,3 +766,7 @@ o relance, glimpse
 o vislumbre, glimmer
 safada, naughty
 regrado, orderly
+o caroço, kernel, pit
+a falha, failure, fault, flaw
+assediado, harassed
+assediar, to harass
