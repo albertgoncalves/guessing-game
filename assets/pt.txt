@@ -529,7 +529,7 @@ esgotar, to deplete, to exhaust
 magoar, to hurt, to upset
 não faz mal, no worries
 foi sem querer, my bad
-o ensejo, intention, occasion, opportunity
+o ensejo, intention, opportunity
 figurar, to appear, to represent
 a vizinhança, neighborhood, vicinity
 ríspido, harsh
@@ -544,7 +544,8 @@ frouxo, loose
 passear, to stroll
 a parede, wall
 parado, stationary, still, stuck
-a parada, break, pause, stop
+a paragem, stop
+a parada, break, pause
 a desvantagem, disadvantage
 despedir, to dismiss, to lay off
 ocupado, busy
@@ -621,7 +622,7 @@ o trajecto, route
 pacato, calm, quiet
 a amizade, friendship
 a oportunidade, chance
-a vez, instance
+a vez, instance, occasion
 faz favor, excuse me
 o dia, day
 o cartão, card
@@ -770,3 +771,94 @@ o caroço, kernel, pit
 a falha, failure, fault, flaw
 assediado, harassed
 assediar, to harass
+o lugar, place, seat
+a dor, ache, pain
+o filme, film, movie
+revelar, to disclose, to reveal, to unveil
+o programa, program
+a raíz, root
+o programa de língua estrangeira, foreign language program
+muitos dos conteúdos, much of the content
+fazendo isso por vários mesas, doing this for several months
+eles moram na Califórnia, they live in California
+esse é o problema, that's the problem
+duas aulas por semana, two classes per week
+às vezes não estás a aprender, sometimes you're not learning
+às vezes, sometimes
+o orgulho das minhas raízes, pride of my roots
+provenho, I originate
+provéns, you originate (fam. sing.)
+ele provém, he originates
+provimos, we originate
+eles provêm, they originate
+eu provinha, I was originating
+provinhas, you were originating (fam. sing.)
+ele provinha, he was originating
+provínhamos, we were originating
+eles provinham, they were originating
+provim, I originated
+provieste, you originated (fam. sing.)
+ele proveio, he originated
+proviemos, we originated
+eles provieram, they originated
+eu lia, I was reading
+lias, you were reading (fam. sing.)
+ele lia, he was reading
+líamos, we were reading
+eles liam, they were reading
+li, I read (pretérito perfeito)
+leste, you read (fam. sing., pretérito perfeito)
+leu, he read (pretérito perfeito)
+eles leram, they read (pretérito perfeito), they had read (literary)
+se eu viesse, if I came
+se viesses, if you came (fam. sing.)
+se ele viesse, if he came
+se viéssemos, if we came
+se eles viessem, if they came
+venha, come! (polite sing.)
+venham, come! (polite pl.)
+venhamos, let's come
+assim que eu vier, as soon as I come
+assim que vieres, as soon as you come (fam. sing.)
+assim que ele vier, as soon as he comes
+assim que viermos, as soon as we come
+assim que eles vierem, as soon as they come
+ouço, I hear
+ouves, you hear (fam. sing.)
+ele ouve, he hears
+ouvimos, we hear, we heard
+eles ouvem, they hear
+ouvi, I heard
+ouviste, you heard (fam. sing.)
+ele ouviu, he heard
+eles ouviram, they heard, they had heard (literary)
+assim que eu vir, as soon as I see
+assim que vires, as soon as you see (fam. sing.)
+assim que ele vir, as soon as he sees
+assim que virmos, as soon as we see
+assim que eles virem, as soon as they see
+espero que eu veja, I hope that I see
+espero que vejas, I hope that you see (fam. sing.)
+espero que ele veja, I hope that he sees
+espero que vejamos, I hope that we see
+espero que eles vejam, I hope that they see
+nasci, I was born (pretérito perfeito)
+nasceste, you were born (fam. sing., pretérito perfeito)
+ele nasceu, he was born (pretérito perfeito)
+nascemos, we are born, we were born (pretérito perfeito)
+eles nasceram, they were born (pretérito perfeito), they had been born (pretérito perfeito)
+abro, I open
+abres, you open (fam. sing.)
+ele abre, he opens
+abrimos, we open, we opened
+eles abrem, they open
+entendo, I understand
+entendes, you understand (fam. sing.)
+ele entende, he understands
+entendemos, we understand, we understood
+eles entendem, they understand
+caminho, I walk
+caminhas, you walk (fam. sing.)
+ele caminha, he walks
+caminhamos, we walk
+eles caminham, they walk
