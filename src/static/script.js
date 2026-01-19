@@ -65,7 +65,9 @@ window.onload = function() {
         const feedback = getElement("feedback");
 
         let selected = next;
-        let response = null;
+        let body = {
+            answer: null,
+        };
 
         question.innerHTML = selected.question;
 
@@ -99,15 +101,15 @@ window.onload = function() {
 
             if (answer.value.trim() !== selected.answer) {
                 feedback.textContent = selected.answer;
-                if (response === null) {
-                    response = answer.value.trim();
+                if (body.answer === null) {
+                    body.answer = answer.value.trim();
                 }
                 return;
             }
 
             post(function(next) {
                 selected = next;
-                response = null;
+                body.answer = null;
 
                 question.innerHTML = selected.question;
                 answer.value = "";
@@ -118,7 +120,7 @@ window.onload = function() {
                      contextSizes,
                      selected.consec,
                      selected.weights);
-            }, response);
+            }, body);
         };
 
         answer.focus();

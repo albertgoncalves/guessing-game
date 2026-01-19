@@ -99,6 +99,7 @@ def next():
 
     path = os.path.join("data", f"{sys.argv[1]}.csv")
     memory = pd.read_csv(path)
+    assert memory.notnull().values.all()
 
     if len(VISITED) == 0:
         return choice(memory)
@@ -107,6 +108,9 @@ def next():
     assert rows.sum() == 1, VISITED[-1]
 
     if body is None:
+        pass
+
+    elif body["answer"] is None:
         memory.loc[rows, "consec"] += 1
 
         rows = CONSEC_REQ <= memory.consec
@@ -123,8 +127,8 @@ def next():
             memory["mask"].values[: memory["mask"].sum() + CORRECT_STEP] = True
 
     else:
-        assert isinstance(body, str), body
-        memory.loc[rows | (memory["mask"] & (memory.answer == body)), "consec"] = 0
+        assert isinstance(body["answer"], str), body
+        memory.loc[rows | (memory["mask"] & (memory.answer == body["answer"])), "consec"] = 0
 
     memory.to_csv(path, index=False)
 

@@ -386,6 +386,8 @@ def main():
         print(f"Created {len(memory)} new question(s)! ({path})")
     else:
         old = pd.read_csv(path)
+        assert old.notnull().values.all()
+
         new = eval(sys.argv[1])()
 
         missing = new.loc[~new.question.isin(old.question)].copy()
