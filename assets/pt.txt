@@ -862,3 +862,6 @@ caminhas, you walk (fam. sing.)
 ele caminha, he walks
 caminhamos, we walk
 eles caminham, they walk
+ele sabe, he knows
+sabemos, we know
+mexer, to stir
