@@ -872,3 +872,4 @@ a verdade, truth
 atrasar, to delay, to stall
 a isca, bait, lure
 iscar, to bait, to lure
+o conselho, advice
