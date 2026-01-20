@@ -875,3 +875,9 @@ iscar, to bait, to lure
 o conselho, advice
 o viúvo, widower
 a viúva, widow
+o sal, salt
+o açúcar, sugar
+a lente, lens
+o bolso, pocket
+a bolsa, purse, stipend
+a carteira, wallet
