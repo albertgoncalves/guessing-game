@@ -873,3 +873,5 @@ atrasar, to delay, to stall
 a isca, bait, lure
 iscar, to bait, to lure
 o conselho, advice
+o viúvo, widower
+a viúva, widow
