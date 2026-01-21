@@ -635,7 +635,7 @@ a realização, accomplishment, achievement
 consentir, to allow, to approve
 o relato, account, report, story
 afastar, to move away
-apertar, to press, to squeeze, to tighten
+apertar, to press, to tighten
 apertado, cramped, tight
 abalado, shaken, shocked, undermined
 abalar, to shake, to shock, to undermine
@@ -865,7 +865,7 @@ eles caminham, they walk
 ele sabe, he knows
 sabemos, we know
 mexer, to stir
-arrancar, to pull out, to snatch, to squeeze
+arrancar, to pull out, to snatch
 a notícia, news
 saiamos, let's exit
 a verdade, truth
@@ -881,3 +881,5 @@ a lente, lens
 o bolso, pocket
 a bolsa, purse, stipend
 a carteira, wallet
+o horário de pico, rush hour
+espremer, to squeeze
