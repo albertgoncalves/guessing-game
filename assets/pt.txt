@@ -596,7 +596,7 @@ ciente, aware
 leio, I read (presente)
 lês, you read (fam. sing., presente)
 ele lê, he reads
-lemos, we read (presente), we read (pretérito, perfeito)
+lemos, we read (presente), we read (pretérito perfeito)
 eles leem, they read (presente)
 espero que eu leia, I hope that I read
 espero que leias, I hope that you read (fam. sing.)
