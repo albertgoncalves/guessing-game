@@ -534,7 +534,7 @@ figurar, to appear, to represent
 a vizinhança, neighborhood, vicinity
 ríspido, harsh
 soltar, to drop, to loosen, to release
-arrastar, to drag, to pull
+arrastar, to drag
 pressentir, to foresee, to sense
 insinuar, to imply, to insinuate
 claro, clear, light
@@ -633,7 +633,7 @@ suceder, to come next, to happen
 o carinho, affection, tenderness
 a realização, accomplishment, achievement
 consentir, to allow, to approve
-o relato, account, report, story
+o relato, account, story
 afastar, to move away
 apertar, to press, to tighten
 apertado, cramped, tight
@@ -941,3 +941,23 @@ se disséssemos, if we said
 assim que eu disser, as soon as I say
 intraduzível, untranslatable
 traduzível, translatable
+arrombar, to break in, to force
+fretar, to charter
+a vela, candle, sail
+velar, to look after, to watch
+remar, to oar, to paddle
+amarrar, to bind, to tie up
+boiar, to float
+o laudo, report
+resgatar, to rescue
+o retiro, retirement
+derivar, to drift
+o zelador, caretaker, janitor
+liderar, to lead
+coagir, to coerce
+atordoar, to stun
+rastejar, to crawl
+pular, to jump
+a cerca, fence
+o caseiro, housekeeper
+a pegada, footprint
