@@ -961,3 +961,9 @@ pular, to jump
 a cerca, fence
 o caseiro, housekeeper
 a pegada, footprint
+assar, to bake, to roast
+minguar, to dwindle, to wither
+desvelar, to exhibit
+o azar, bad luck, misfortune
+atrair, to attract
+trair, to betray
