@@ -665,19 +665,19 @@ doar, to donate
 a soneca, nap, snooze
 elogiar, to praise
 ajoelhar-se, to kneel down
-alegrar-se, to become happy, to cheer up
+alegrar-se, to cheer up
 apaixonar-se, to fall in love
 arrepender-se, to regret
-arrumar-se, to get dressed, to get ready
+arrumar-se, to get ready
 assustar-se, to get scared
 barbear-se, to shave
 chamar-se, to be named
-deitar-se, to lie down, to go to bed
+deitar-se, to lie down
 despedir-se, to say goodbye
-dirigir-se, to address someone, to make your way somewhere
+dirigir-se, to address, to drive
 divertir-se, to have fun
 emocionar-se, to get emotional
-enganar-se, to be mistaken, to be wrong
+enganar-se, to be mistaken
 enxugar-se, to dry oneself
 esquecer-se, to forget
 lembrar-se, to remember
@@ -967,3 +967,5 @@ desvelar, to exhibit
 o azar, bad luck, misfortune
 atrair, to attract
 trair, to betray
+comprimir, to compress, to shrink
+encarar, to confront
