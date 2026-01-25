@@ -722,7 +722,7 @@ apressar, to hurry
 o tecto, ceiling
 o tecido, fabric
 o pano, cloth, rag
-o local, location, place
+o local, location, site
 o prado, meadow
 decidir, to conclude, to decide
 o condado, county
@@ -779,11 +779,11 @@ o programa, program
 a raíz, root
 o programa de língua estrangeira, foreign language program
 muitos dos conteúdos, much of the content
-fazendo isso por vários mesas, doing this for several months
+fazendo isto por vários meses, doing this for several months
 eles moram na Califórnia, they live in California
 esse é o problema, that's the problem
 duas aulas por semana, two classes per week
-às vezes não estás a aprender, sometimes you're not learning
+às vezes não estás a aprender, sometimes you're not learning (fam. sing.)
 às vezes, sometimes
 o orgulho das minhas raízes, pride of my roots
 provenho, I originate
