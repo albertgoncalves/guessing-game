@@ -683,8 +683,8 @@ esquecer-se, to forget
 lembrar-se, to remember
 levantar-se, to get up
 machucar-se, to get hurt
-maquiar-se, to put makeup on
-ofender-se, to become offended
+maquiar-se, to put on makeup
+ofender-se, to get offended
 pentear-se, to comb one's hair
 preocupar-se, to worry
 sentar-se, to sit
@@ -705,7 +705,7 @@ o mato, bush
 encostar, to pull over
 largado, dropped
 a mata, forest
-arrepiar, to get goose bumps, to shiver
+arrepiar, to shiver
 a ferrugem, rust
 o colchão, mattress
 a régua, ruler
@@ -745,7 +745,7 @@ efectuar, to put into action, to perform
 o encanto, allure, charm
 recorrer, to appeal to, to turn to
 a aposta, bet, gamble
-precipitar, to cause an event to happen suddenly
+precipitar, to cause to happen suddenly
 agudo, acute, sharp
 prever, to anticipate, to predict
 rebentar, to burst
@@ -969,3 +969,14 @@ atrair, to attract
 trair, to betray
 comprimir, to compress, to shrink
 encarar, to confront
+desleixar, to neglect
+o concelho, council, municipality
+o arrepio, shiver
+a reviravolta, turnaround, twist
+despistar, to mislead
+averiguar, to ascertain, to find out
+a encruzilhada, crossroads
+descambar, to escalate
+minucioso, meticulous
+a paisagem, landscape
+sussurrar, to whisper
